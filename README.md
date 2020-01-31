@@ -26,7 +26,9 @@ Othewise the problem can be solved following the tutorial at: https://clang-omp.
 devtools::test()
 ## Example
 data(funccdata)
-res<-funcc_biclust(funccdata, ,delta=0.005,theta=1,number=500, alpha=0,beta=0,const_alpha=T,const_beta=T)
+
+res<-funcc_biclust(funccdata,delta=0.005,theta=1,number=500, alpha=0,beta=0,const_alpha=T,const_beta=T)
+
 funcc_show_results(funccdata,res)
 
 ## Documentation
