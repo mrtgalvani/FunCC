@@ -1,0 +1,285 @@
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc} % @SET ENCODING@
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `FunCC'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\inputencoding{utf8}
+\item[Title]\AsIs{Functional Cheng and Church Bi-clustering}
+\item[Version]\AsIs{0.0.0.9000}
+\item[Description]\AsIs{The FunCC package allows to apply the funCC algorithm to simultaneously cluster the rows and the columns of a data matrix whose inputs are functions.}
+\item[Depends]\AsIs{R (>= 3.5.1)}
+\item[License]\AsIs{What license is it under?}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[RoxygenNote]\AsIs{7.0.2}
+\item[Imports]\AsIs{narray,
+biclust,
+reshape,
+RColorBrewer,
+ggplot2}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{find\_best\_delta}{Functional Cheng and Church Algorithm varying the delta value}{find.Rul.best.Rul.delta}
+%
+\begin{Description}\relax
+The find\_best\_delta function evaluate the results of FunCC algorithm in terms of total H-score value, the number of obtained bi-clusters and the number of not assigned elements when varying the delta value
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+find_best_delta(
+  fun_mat,
+  delta_min,
+  delta_max,
+  num_delta = 10,
+  template.type = "mean",
+  theta = 1.5,
+  number = 100,
+  alpha = 0,
+  beta = 0,
+  const_alpha = F,
+  const_beta = F,
+  shift.alignement = F,
+  shift.max = 0.1,
+  max.iter.align = 100
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fun\_mat}] The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
+
+\item[\code{delta\_min}] scalar: Maximum value of the maximum of accepted score, should be a real value > 0
+
+\item[\code{num\_delta}] integer: number of delta to be evaluated between delta\_min and delta\_max
+
+\item[\code{template.type}] character: type of template required. If template.type='mean' the template is evaluated as the average function, if template.type='medoid' the template is evaluated as the medoid function.
+
+\item[\code{theta}] scalar: Scaling factor should be a real value > 1
+
+\item[\code{number}] integer: Maximum number of iterations
+
+\item[\code{alpha}] binary: if alpha=1 row shift is allowed, if alpha=0 row shift is avoided
+
+\item[\code{beta}] binary: if beta=1 row shift is allowed, if beta=0 row shift is avoided
+
+\item[\code{const\_alpha}] logicol: indicates if row shift is contrained as constant
+
+\item[\code{shift.alignement}] logicol: If shift.alignement=True the shift aligment is performed, if shift.alignement=False no alignment is performed
+
+\item[\code{shift.max}] scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1
+
+\item[\code{max.iter.align}] integer: maximum number of iteration in the alignment procedure
+
+\item[\code{const\_b}] logicol: indicates if col shift is contrained as constant
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a dataframe containing for each evaluated delta: Htot\_sum (the sum of totale H-score), num\_clust (the number of found Bi-clusters), not\_assigned (the number of not assigned elements)
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{funCCdata}{Simulated data}{funCCdata}
+\keyword{datasets}{funCCdata}
+%
+\begin{Description}\relax
+funCC.data is a functional dataset displaying block structure
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(funCCdata)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+An object of class \code{array} of dimension 30 x 7 x 240.
+\end{Format}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(funCCdata)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{funcc\_biclust}{Functional Cheng and Church algorithm}{funcc.Rul.biclust}
+%
+\begin{Description}\relax
+The funCC algorithm allows to simultaneously cluster the rows and the columns of a data matrix where each entry of the matrix is a function or a time series
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+funcc_biclust(
+  fun_mat,
+  delta,
+  theta = 1,
+  template.type = "mean",
+  number = 100,
+  alpha = 0,
+  beta = 0,
+  const_alpha = F,
+  const_beta = F,
+  shift.alignement = F,
+  shift.max = 0.1,
+  max.iter.align = 100
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fun\_mat}] The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
+
+\item[\code{delta}] scalar: Maximum of accepted score, should be a real value > 0
+
+\item[\code{theta}] scalar: Scaling factor should be a real value > 1
+
+\item[\code{template.type}] character: type of template required. If template.type='mean' the template is evaluated as the average function, if template.type='medoid' the template is evaluated as the medoid function.
+
+\item[\code{number}] integer: Maximum number of iteration
+
+\item[\code{alpha}] binary: if alpha=1 row shift is allowed, if alpha=0 row shift is avoided
+
+\item[\code{beta}] binary: if beta=1 row shift is allowed, if beta=0 row shift is avoided
+
+\item[\code{const\_alpha}] logicol: Indicates if row shift is contrained as constant.
+
+\item[\code{shift.alignement}] logicol: If shift.alignement=True the shift aligment is performed, if shift.alignement=False no alignment is performed
+
+\item[\code{shift.max}] scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1
+
+\item[\code{max.iter.align}] integer: maximum number of iteration in the alignment procedure
+
+\item[\code{const\_b}] logicol: Indicates if col shift is contrained as constant.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a list of two elements containing respectively the Biclustresults and a dataframe containing the parameters setting of the algorithm
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{funcc\_show\_bicluster\_coverage}{plotting coverage of each bi-cluster}{funcc.Rul.show.Rul.bicluster.Rul.coverage}
+%
+\begin{Description}\relax
+funcc\_show\_bicluster\_coverage graphically shows the coverage of each bi-cluster in terms of percentage of included functions
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+funcc_show_bicluster_coverage(
+  fun_mat,
+  res_input,
+  not_assigned = T,
+  max_coverage = 1
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fun\_mat}] The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
+
+\item[\code{res\_input}] An object produced by the funcc\_biclust function
+
+\item[\code{not\_assigned}] logicol: if true also the cluster of not assigned elements is included
+
+\item[\code{max\_coverage}] scalar: percentage of maximum cumulative coverage to be shown
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a figure representing for each bi-cluster the coverage in terms of percentage of included functions
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{funcc\_show\_bicluster\_dimension}{plotting dimensions of each bi-cluster}{funcc.Rul.show.Rul.bicluster.Rul.dimension}
+%
+\begin{Description}\relax
+funcc\_show\_bicluster\_dimension graphically shows the dimensions of each bi-cluster (i.e. number of rows and columns)
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+funcc_show_bicluster_dimension(fun_mat, res_input)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fun\_mat}] The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
+
+\item[\code{res\_input}] An object produced by the funcc\_biclust function
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a figure representing the dimensions of each bi-cluster (i.e. number of rows and columns)
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{funcc\_show\_block\_matrix}{Plotting co-clustering results of funCC on the data matrix}{funcc.Rul.show.Rul.block.Rul.matrix}
+%
+\begin{Description}\relax
+funcc\_show\_block\_matrix graphically shows the bi-clusters positions in the original data matrix
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+funcc_show_block_matrix(fun_mat, res_input)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fun\_mat}] The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
+
+\item[\code{res\_input}] An object produced by the funcc\_biclust function
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a figure representing the bi-clusters positions in the original data matrix
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{funcc\_show\_results}{Plotting co-clustering results of funCC}{funcc.Rul.show.Rul.results}
+%
+\begin{Description}\relax
+funcc\_show\_results graphically shows the results of the bi-clustering
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+funcc_show_results(fun_mat, res_input, only.mean = F, aligned = F, warping = F)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fun\_mat}] The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
+
+\item[\code{res\_input}] An object produced by the funcc\_biclust function
+
+\item[\code{only.mean}] logicol: if True only the template functions for each bi-cluster is displayed
+
+\item[\code{aligned}] logicol: if True the alignemd functions are displayed
+
+\item[\code{warping}] logicol: if True also a figure representing the warping functions are displayed
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a figure representing each bi-cluster in terms of functions contained in it or templates
+\end{Value}
+\printindex{}
+\end{document}
