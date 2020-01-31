@@ -14,9 +14,11 @@ The package can be installed directly from github but devtools is required.
 If devtools is not installed use the following comand to install it
 
 install.packages('devtools') 
+
 and then install the package
 
 library(devtools)
+
 install_github('mrtgalvani/FunCC')
 
 Othewise the problem can be solved following the tutorial at: https://clang-omp.github.io/.
@@ -24,7 +26,9 @@ Othewise the problem can be solved following the tutorial at: https://clang-omp.
 ## Automatic tests
 
 devtools::test()
+
 ## Example
+
 data(funccdata)
 
 res<-funcc_biclust(funccdata,delta=0.005,theta=1,number=500, alpha=0,beta=0,const_alpha=T,const_beta=T)
