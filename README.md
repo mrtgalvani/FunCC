@@ -29,11 +29,13 @@ devtools::test()
 
 ## Example
 
-data(funccdata)
+data(funCCdata)
 
-res<-funcc_biclust(funccdata,delta=0.005,theta=1,number=500, alpha=0,beta=0,const_alpha=T,const_beta=T)
+res<-funcc_biclust(funCCdata,delta=0.004,theta=1,number=500, alpha=1,beta=0,const_alpha=T,const_beta=T)
 
-funcc_show_results(funccdata,res)
+funcc_show_results(funCCdata,res)
+
+funcc_show_block_matrix(funCCdata,res)
 
 ## Documentation
 
