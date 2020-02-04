@@ -79,7 +79,7 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
   not_assigned <- numeric()
 
   for(d in delta_check){
-    print(d)
+    print(paste0('Iteration: ',which(delta_check)==d,' - Delta: ',d))
     res_fun_list <- funcc_biclust(fun_mat,delta=d,template.type=template.type,theta=theta,number=number,alpha=alpha,beta=beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align)
     res_fun <- res_fun_list[[1]]
 
