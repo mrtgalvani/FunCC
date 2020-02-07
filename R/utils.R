@@ -281,27 +281,32 @@ colscore_fun<-function(mat_dist){
 #' addrowscore_fun find row score when adding a row
 #' @noRd
 #' @keywords Internal
-addrowscore_fun<-function(mat_dist){
-
+addrowscore_fun<-function(mat_dist,logc){
+  
   #m=dim(mat_dist)[2] # numero di colonne
-
-  score_fun = rowMeans(mat_dist,na.rm=T)#rowSums(mat_dist,na.rm=T)/(m)
-
+  
+  score_fun = rowMeans(mat_dist[,logc],na.rm=T)#rowSums(mat_dist,na.rm=T)/(m)
+  
   score_fun
-
+  
 }
+
 
 #' addcolscore_fun find col score when adding a col
 #' @noRd
 #' @keywords Internal
-addcolscore_fun<-function(mat_dist){
-
-  score_fun = colMeans(mat_dist,na.rm=T)#colSums(mat_dist,na.rm=T)/(n)
-
+addcolscore_fun<-function(mat_dist,logr){
+  
+  #n=dim(mat_dist)[1]# numero di righe
+  
+  
+  score_fun = colMeans(mat_dist[logr,],na.rm=T)#colSums(mat_dist,na.rm=T)/(n)
+  
   score_fun
   # vettore lungo tanto quanto le colonne (giorni)
   # mi serve per capire che colonna togliere
 }
+
 
 
 #############################
@@ -601,42 +606,41 @@ cc3_fun<-function(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alig
   br<-1
   ilogr<-rep(FALSE,length(logr))
   while(br>0)
-  {
-
-    # dist mat
-    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
+  { 
+    
+    # dist mat 
+    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,warping.method,optim.method,shift.max, max.iter)
+    
     br1<-sum(logc)
     br2<-sum(logr)
     h<-ccscore_fun(dist_mat)
     #print(paste0('h: ',h))
-
-    dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
-    dj<-addcolscore_fun(dist_mat_add)
+    
+    dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,warping.method,optim.method,shift.max, max.iter)
+    
+    dj<-addcolscore_fun(dist_mat_add,logr)
     #print(dj)
-
+    
     mdj<-dj<=h
     logc[mdj]<-TRUE
-
-    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
+    
+    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,warping.method,optim.method,shift.max, max.iter)
+    
     h<-ccscore_fun(dist_mat)
-
-    dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
-    di<-addrowscore_fun(dist_mat_add)
-
+    
+    dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,warping.method,optim.method,shift.max, max.iter)
+    
+    di<-addrowscore_fun(dist_mat_add,logc)
+    
     mdi<-di<=h
     logr[mdi]<-TRUE
-
+    
     br<-sum(logc)+sum(logr)-br1-br2
   }
   ret<-list(logr,logc)
   ret
-
+  
 }
-
 ########################################
 ######### Find biggest Bicluster: ###########
 ########################################
