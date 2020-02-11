@@ -124,9 +124,6 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
 
   }
 
-  h <- data.frame(Htot_sum=Htot_sum,Htot_all_mean=Htot_all_mean,num_clust=num_clust,delta=delta_check,not_assigned=not_assigned)
-  h
-  
   dev.new()
   g <- ggplot(h,aes(x=delta,y=Htot_sum))+geom_point()+geom_line() + ggtitle('Delta vs H tot') 
   print(g)
@@ -141,4 +138,8 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
   g <- ggplot(h,aes(x=delta,y=not_assigned))+geom_point()+geom_line() + ggtitle('Delta vs not assigned')
   print(g)
   dev.off()
+  
+  h <- data.frame(Htot_sum=Htot_sum,Htot_all_mean=Htot_all_mean,num_clust=num_clust,delta=delta_check,not_assigned=not_assigned)
+  h
+  
 }
