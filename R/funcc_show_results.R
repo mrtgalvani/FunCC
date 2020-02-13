@@ -394,7 +394,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
       g <- ggplot2::ggplot(data_frame_cl,ggplot2::aes(x=variable,#factor(variable),
                                     y=value,group=obj,col=factor(cluster))) + ggplot2::geom_line()+
         #geom_line(data=template,mapping=aes(x=factor(variable),y=value,group=cluster),col='black',size=1)+
-        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Representative functions per cluster')+
+        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Functions per cluster')+
         ggplot2::xlab('') + ggplot2::ylab('')
       print(g)
     }
