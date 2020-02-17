@@ -1,17 +1,18 @@
-#' @title plotting dimensions of each bi-cluster
-#' @description funcc_show_bicluster_dimension graphically shows the dimensions of each bi-cluster (i.e. number of rows and columns)
+
+#' @title plotting hscore of each bi-cluster on bicluster dimension
+#' @description funcc_show_bicluster_hscore graphically shows the hscore vs the dimension (i.e. number of rows and columns) of each bi-cluster 
 #' @export
 #' @param fun_mat The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
 #' @param res_input An object produced by the funcc_biclust function
 #' @return a figure representing the dimensions of each bi-cluster (i.e. number of rows and columns)
 #'
-funcc_show_bicluster_dimension <- function(fun_mat,res_input){
-
+funcc_show_bicluster_hscore <- function(fun_mat,res_input){
+  
   col_palette = c(RColorBrewer::brewer.pal(9, 'Set1'),
                   RColorBrewer::brewer.pal(12, 'Set3'),
                   RColorBrewer::brewer.pal(8, 'Set2'),
                   RColorBrewer::brewer.pal(8, 'Accent'),
-
+                  
                   RColorBrewer::brewer.pal(8, 'Dark2'),
                   RColorBrewer::brewer.pal(9, 'PiYG'),
                   RColorBrewer::brewer.pal(9, 'PuOr'),
@@ -36,38 +37,29 @@ funcc_show_bicluster_dimension <- function(fun_mat,res_input){
                   RColorBrewer::brewer.pal(9,'Paired'),
                   RColorBrewer::brewer.pal(9,'Paired'),
                   RColorBrewer::brewer.pal(9,'Paired'))
-
-
-  res = res_input[[1]]
-
-  count_null <- apply(fun_mat, c(1,2), function(x) sum(is.na(x)))
-  not_null <-count_null < dim(fun_mat)[3]
-
-
-  count = data.frame(cl=character(),nrow=numeric(),ncol=numeric(),n_element=numeric())
-  if(res@Number==1){
-    count = rbind(count,data.frame(cl=1,nrow=sum(c(res@RowxNumber)),ncol=sum(c(res@NumberxCol)),n_element=sum(not_null[c(res@NumberxCol),c(res@RowxNumber)])))
-    # sum(c(res@NumberxCol))*sum(c(res@RowxNumber))))
-
-  }
-  if(res@Number>1){
-    for( i in 1:res@Number){
-      count = rbind(count,data.frame(cl=i,nrow=sum(res@RowxNumber[,i]),ncol=sum(res@NumberxCol[i,]),n_element=sum(not_null[res@RowxNumber[,i],res@NumberxCol[i,]])))
+      
+    
+    res <- res_input[[1]]
+    param <- res_input[[2]]
+    biclust <- data.frame(biclust=numeric(),h_score=numeric(),dim=numeric())
+    for(i in 1:res@Number){
+      logr <- res@RowxNumber[,i]
+      logc <- res@NumberxCol[i,]
+      fun_mat_prova <- fun_mat[logr,logc,]
+      dist_mat <- FunCC:::evaluate_mat_dist(fun_mat_prova,param$template.type, param$alpha, param$beta, param$const_alpha, param$const_beta, param$shift.alignement, param$shift.max, param$max.iter)
+      h_score <- FunCC:::ccscore_fun(dist_mat)
+      dim <- sum(res@RowxNumber[,i])*sum(res@NumberxCol[i,])
+      biclust_i <- data.frame(biclust=i,h_score=h_score,dim=dim)
+      biclust <- rbind(biclust,biclust_i)
+      
     }
-  }
-
-
-  grDevices::dev.new()
-  g <- ggplot2::ggplot(count, ggplot2::aes(x=ncol,y=nrow,col=factor(cl))) + ggplot2::geom_point(ggplot2::aes(size = n_element)) +
-    ggplot2::scale_color_manual(values=col_palette) +
-    ggplot2::xlab('Number of Columns') + ggplot2::ylab('Number of Rows') + ggplot2::labs(color='Bi-Cluster')
-
-  print(g)
-
-  # grDevices::dev.new()
-  # #g <- ggplot(count, aes(y=n_element,group=1)) + geom_boxplot()
-  # g <- ggplot2::ggplot(count, ggplot2::aes(x=n_element)) + ggplot2::geom_histogram() +ggplot2::labs(title = 'Bi-clusters dimension distribution')
-  # print(g)
+    
+    grDevices::dev.new()
+    g <- ggplot2::ggplot(biclust,ggplot2::aes(x=dim,y=h_score,fill=factor(biclust)))+
+      ggplot2::geom_point() + ggplot2::scale_color_manual(values=col_palette) +
+      ggplot2::xlab('Dimension') + ggplot2::ylab('H score') + ggplot2::labs(color='Bi-Cluster')
+    
+    print(g)
 
 
 }

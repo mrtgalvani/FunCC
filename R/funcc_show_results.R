@@ -169,7 +169,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
     template.mean$obs <- paste0('ROW',row.names(template.mean))
     template.mean = reshape::melt(template.mean,id.vars=c("obs","cluster"))
     template.mean$variable <- as.numeric(gsub('X','',template.mean$variable))
-
+    
     #
 
     # plot
@@ -197,6 +197,8 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
 
       warping_aligned$obs <- paste0('ROW',row.names(warping_aligned))
       warping_aligned = reshape::melt(warping_aligned,id.vars=c("obs","cluster"))
+      warping_aligned$variable <- as.numeric(gsub('X','',warping_aligned$variable))
+      
       grDevices::dev.new()
       g1 <- ggplot2::ggplot(warping_aligned,ggplot2::aes(x=variable,#factor(variable),
                                        y=value,group=obs,col=factor(cluster))) + ggplot2::geom_line()+
@@ -239,6 +241,8 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
 
       warping_aligned$obs <- paste0('ROW',row.names(warping_aligned))
       warping_aligned = reshape::melt(warping_aligned,id.vars=c("obs","cluster"))
+      warping_aligned$variable <- as.numeric(gsub('X','',warping_aligned$variable))
+      
 
       g1 <- ggplot2::ggplot(warping_aligned,ggplot2::aes(x=variable,#factor(variable),
                                        y=value,group=obs,col=factor(cluster))) + ggplot2::geom_line()+

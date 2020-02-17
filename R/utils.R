@@ -218,7 +218,7 @@ evaluate_mat_dist <- function(fun_mat,template.type,a,b,const_a,const_b,shift.al
 
     mat_dist <- rowSums((fun_mat-new_fun)^2,dims = 2)/p
   }
-  mat_dist
+  mat_dist#/(max(fun_mat)+1)/(sd(fun_mat)+1) #!!!!!!!
 }
 
 #' evaluate_mat_dist_add evaluates distance matrix
@@ -239,7 +239,7 @@ evaluate_mat_dist_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,co
 
     mat_dist <- rowSums((fun_mat-new_fun)^2,dims = 2)/p
   }
-  mat_dist
+  mat_dist#/(max(fun_mat[logr,logc,])+1)/(sd(fun_mat[logr,logc,])+1)  #!!!!!!!
 }
 
 #' ccscore_fun find submatrices score
