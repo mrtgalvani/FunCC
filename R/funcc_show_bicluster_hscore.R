@@ -41,7 +41,7 @@ funcc_show_bicluster_hscore <- function(fun_mat,res_input){
     
     res <- res_input[[1]]
     param <- res_input[[2]]
-    biclust <- data.frame(biclust=numeric(),h_score=numeric(),dim=numeric())
+    biclust <- data.frame(biclust_n=numeric(),h_score=numeric(),dim=numeric())
     for(i in 1:res@Number){
       logr <- res@RowxNumber[,i]
       logc <- res@NumberxCol[i,]
@@ -49,13 +49,13 @@ funcc_show_bicluster_hscore <- function(fun_mat,res_input){
       dist_mat <- FunCC:::evaluate_mat_dist(fun_mat_prova,param$template.type, param$alpha, param$beta, param$const_alpha, param$const_beta, param$shift.alignement, param$shift.max, param$max.iter)
       h_score <- FunCC:::ccscore_fun(dist_mat)
       dim <- sum(res@RowxNumber[,i])*sum(res@NumberxCol[i,])
-      biclust_i <- data.frame(biclust=i,h_score=h_score,dim=dim)
+      biclust_i <- data.frame(biclust_n=i,h_score=h_score,dim=dim)
       biclust <- rbind(biclust,biclust_i)
       
     }
     
     grDevices::dev.new()
-    g <- ggplot2::ggplot(biclust,ggplot2::aes(x=dim,y=h_score,fill=factor(biclust)))+
+    g <- ggplot2::ggplot(biclust,ggplot2::aes(x=dim,y=h_score,fill=factor(biclust_n)))+
       ggplot2::geom_point() + ggplot2::scale_fill_manual(values=col_palette) +
       ggplot2::xlab('Dimension') + ggplot2::ylab('H score') + ggplot2::labs(fill='Bi-Cluster')
     
