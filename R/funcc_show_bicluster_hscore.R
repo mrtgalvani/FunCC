@@ -55,9 +55,9 @@ funcc_show_bicluster_hscore <- function(fun_mat,res_input){
     }
     
     grDevices::dev.new()
-    g <- ggplot2::ggplot(biclust,ggplot2::aes(x=dim,y=h_score,fill=factor(biclust_n),color=factor(biclust_n)))+
-      ggplot2::geom_point() + ggplot2::scale_fill_manual(values=col_palette) + ggplot2::scale_color_manual(values=col_palette) +
-      ggplot2::xlab('Dimension') + ggplot2::ylab('H score') + ggplot2::labs(fill='Bi-Cluster')
+    g <- ggplot2::ggplot(biclust,ggplot2::aes(x=dim,y=h_score,color=factor(biclust_n)))+
+      ggplot2::geom_point() + ggplot2::scale_color_manual(values=col_palette) +
+      ggplot2::xlab('Dimension') + ggplot2::ylab('H score') + ggplot2::labs(color='Bi-Cluster')
     
     print(g)
 
