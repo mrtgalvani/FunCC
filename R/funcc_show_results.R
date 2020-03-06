@@ -246,7 +246,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
 
       g1 <- ggplot2::ggplot(warping_aligned,ggplot2::aes(x=variable,#factor(variable),
                                        y=value,group=obs,col=factor(cluster))) + ggplot2::geom_line()+
-        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Warping functions per cluster')+
+        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Warping functions per bi-cluster')+
         ggplot2::xlab('') + ggplot2::ylab('')
       grDevices::dev.new()
       print(g1)
@@ -256,7 +256,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
       g <- ggplot2::ggplot(fun_aligned,ggplot2::aes(x=variable,#factor(variable),
                                   y=value,group=obs,col=factor(cluster))) + ggplot2::geom_line()+
         #geom_line(data=template,mapping=aes(x=factor(variable),y=res_aligned.template,group=cluster),col='black',size=1)+
-        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Aligned functions per cluster')+
+        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Aligned functions per bi-cluster')+
         ggplot2::xlab('') + ggplot2::ylab('')
       grDevices::dev.new()
       print(g)
@@ -375,7 +375,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
         g <- ggplot2::ggplot(template,ggplot2::aes(x=variable,#factor(variable),
                                  y=value,group=obs,col=factor(cluster))) + ggplot2::facet_wrap(~factor(cluster)) +
           ggplot2::geom_line(size=1.2) +
-          ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Representative functions per cluster')+
+          ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Representative functions per bi-cluster')+
           ggplot2::xlab('') + ggplot2::ylab('')
         print(g)
       }
@@ -385,7 +385,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
                                  y=value,group=obs,col=factor(cluster))) + ggplot2::facet_wrap(~factor(cluster)) +
           ggplot2::geom_line(size=1.2) +
           ggplot2::geom_line(data=template.mean,mapping=ggplot2::aes(x=variable,y=value,group=factor(cluster)),col='black',size=1.2)+
-          ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Representative functions per cluster')+
+          ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Representative functions per bi-cluster')+
           ggplot2::xlab('') + ggplot2::ylab('')
         print(g)
       }
@@ -398,7 +398,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
       g <- ggplot2::ggplot(data_frame_cl,ggplot2::aes(x=variable,#factor(variable),
                                     y=value,group=obj,col=factor(cluster))) + ggplot2::geom_line()+
         #geom_line(data=template,mapping=aes(x=factor(variable),y=value,group=cluster),col='black',size=1)+
-        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Functions per cluster')+
+        ggplot2::facet_wrap(~factor(cluster)) + ggplot2::theme(legend.position = 'none') + ggplot2::scale_color_manual(values=col_palette) + ggplot2::ggtitle(label='Functions per bi-cluster')+
         ggplot2::xlab('') + ggplot2::ylab('')
       print(g)
     }

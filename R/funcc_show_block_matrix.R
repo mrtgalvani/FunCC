@@ -68,7 +68,7 @@ funcc_show_block_matrix <- function(fun_mat,res_input){
   grDevices::dev.new()
   g <- ggplot2::ggplot(x_y, ggplot2::aes(variable,id )) + ggplot2::geom_tile(ggplot2::aes(fill = factor(value)),
                                                   colour = "white") + ggplot2::scale_fill_manual(values=col_palette) +
-    ggplot2::xlab('Columns') + ggplot2::ylab('Rows') + ggplot2::labs(fill='Cluster') + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 60, hjust = 1)) +ggplot2::theme_bw()
+    ggplot2::xlab('Columns') + ggplot2::ylab('Rows') + ggplot2::labs(fill='Bi-cluster') + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 60, hjust = 1)) +ggplot2::theme_bw()
 
   print(g)
 
