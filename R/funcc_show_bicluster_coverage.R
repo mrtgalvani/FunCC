@@ -30,7 +30,7 @@ funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=T,max_c
   coverage <- data.frame(cl=seq(1,res@Number),dim=dim)
   coverage$perc <- coverage$dim/n_tot
   coverage$color='grey'
-  coverage$type='Cluster'
+  coverage$type='Bi-cluster'
 
   if(not_assigned){
     x_y=matrix(0,nrow=dim(fun_mat)[1],ncol=dim(fun_mat)[2])
