@@ -58,9 +58,9 @@ funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=T,max_c
     ggplot2::scale_fill_manual(values=c('red','grey2')) +
     ggplot2::geom_point(data=coverage,ggplot2::aes(x=factor(cl),y=cum_perc*max(perc)),color='blue')+
     ggplot2::geom_line(data=coverage,ggplot2::aes(x=factor(cl),y=cum_perc*max(perc)),color='blue')+
-    ggplot2::scale_y_continuous(limits=c(0, max(coverage$perc)),name = "Clusters coverage",
-                                sec.axis = ggplot2::sec_axis(~./max(coverage$perc), name = "Clusters cumulative coverage")) +
-    ggplot2::xlab('Cluster')+ggplot2::theme(legend.title =  ggplot2::element_blank())
+    ggplot2::scale_y_continuous(limits=c(0, max(coverage$perc)),name = "Bi-clusters coverage",
+                                sec.axis = ggplot2::sec_axis(~./max(coverage$perc), name = "Bi-clusters cumulative coverage")) +
+    ggplot2::xlab('Bi-cluster')+ggplot2::theme(legend.title =  ggplot2::element_blank())
 
   g
 
