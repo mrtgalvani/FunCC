@@ -20,53 +20,53 @@
 find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.type='mean',theta=1.5,number=100,alpha=0,beta=0,const_alpha=F,const_beta=F,shift.alignement=F,shift.max = 0.1, max.iter.align=100){
 
   if(length(dim(fun_mat))!=3){
-    print('Error: fun_mat should be an array of three dimensions')
-    break}
+    stop('Error: fun_mat should be an array of three dimensions')
+    }
 
   if(template.type=='medoid' & (alpha!=0 | beta!=0)){
-    print('Error: Medoid template is defined only for alpha and beta equal to 0')
-    break}
+    stop('Error: Medoid template is defined only for alpha and beta equal to 0')
+    }
 
   if(shift.max>1 | shift.max<0){
-    print('Error: shift.max must be in [0,1]')
-    break}
+    stop('Error: shift.max must be in [0,1]')
+    }
 
   if(!(alpha %in% c(0,1)) | !(beta %in% c(0,1))){
-    print('Error: alpha and beta must be 0 or 1')
-    break}
+    stop('Error: alpha and beta must be 0 or 1')
+    }
 
   if(!(template.type %in% c('mean','medoid'))){
-    print(paste0('Error: template.type ',template.type,' is not defined'))
-    break}
+    stop(paste0('Error: template.type ',template.type,' is not defined'))
+    }
 
   if(number<=0 | number%%1!=0){
-    print('Error: number must be an integer greater than 0')
-    break}
+    stop('Error: number must be an integer greater than 0')
+    }
 
   if(!(shift.alignement %in% c(TRUE,FALSE))){
-    print(paste0('Error: shift.alignement should be a logicol variable'))
-    break}
+    stop(paste0('Error: shift.alignement should be a logicol variable'))
+    }
 
 
   if(max.iter.align<=0 | max.iter.align%%1!=0){
-    print('Error: max.iter.align must be an integer greater than 0')
-    break}
+    stop('Error: max.iter.align must be an integer greater than 0')
+    }
 
   if(base::length(dim(fun_mat))!=3){
-    print('Error: fun_mat must an array of three dimensions')
-    break}
+    stop('Error: fun_mat must an array of three dimensions')
+    }
 
   if(!(const_alpha %in% c(F,T)) | !(const_beta %in% c(F,T))){
-    print('Error: const_alpha and const_beta must TRUE or FALSE')
-    break}
+    stop('Error: const_alpha and const_beta must TRUE or FALSE')
+    }
 
   if(delta_min<0 | !is.numeric(delta_min) | delta_max<0 | !is.numeric(delta_max)){
-    print('Error: delta_min and delta_max must be a number greater than 1')
-    break}
+    stop('Error: delta_min and delta_max must be a number greater than 1')
+    }
 
   if(delta_min>delta_max){
-    print('Error: delta_max must be a number greater than delta_min')
-    break}
+    stop('Error: delta_max must be a number greater than delta_min')
+    }
 
   delta_check <- seq(delta_min,delta_max,(delta_max-delta_min)/num_delta)
 

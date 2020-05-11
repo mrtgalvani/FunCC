@@ -21,19 +21,19 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
   template.type=as.character(res_input$parameter$template.type)
 
   if(shift.alignement==F & (aligned==T|warping==T)){
-    print('Warning: no aligned can be performed if results are without alignment')
+    warning('Warning: no aligned can be performed if results are without alignment')
     aligned=F
     warping=F
   }
   if(aligned==F & warping==T){
-    print('Warning: no warping can be shown if aligned is False')
+    warning('Warning: no warping can be shown if aligned is False')
     warping=F
   }
 
 
   if(res@Number==0){
-    print('Warning: no Cluster found')
-    break}
+    stop('Warning: no Cluster found')
+    }
 
   col_palette = c(RColorBrewer::brewer.pal(9, 'Set1'),
                   RColorBrewer::brewer.pal(12, 'Set3'),

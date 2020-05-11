@@ -12,13 +12,13 @@ funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=T,max_c
   res <- res_input[[1]]
 
   if(max_coverage>1){
-    print('Error: max_coverage should be a value between 0 and 1')
-    break
+    stop('Error: max_coverage should be a value between 0 and 1')
+    
   }
 
   if(!not_assigned %in% c(T,F)){
-    print('Error: not_assigned should be a logicol value TRUE/FALSE')
-    break
+    stop('Error: not_assigned should be a logicol value TRUE/FALSE')
+    
   }
 
   n_tot <- dim(fun_mat)[1]*dim(fun_mat)[2]
