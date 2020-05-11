@@ -31,7 +31,7 @@ devtools::test()
 
 data(funCCdata)
 
-res<-funcc_biclust(funCCdata,delta=0.004,theta=1,number=500, alpha=1,beta=0,const_alpha=T,const_beta=T)
+res<-funcc_biclust(funCCdata,delta=10,theta=1,number=500, alpha=1,beta=0,const_alpha=T,const_beta=T)
 
 funcc_show_results(funCCdata,res)
 
