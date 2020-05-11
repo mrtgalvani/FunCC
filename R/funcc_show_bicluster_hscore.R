@@ -45,7 +45,7 @@ funcc_show_bicluster_hscore <- function(fun_mat,res_input){
     for(i in 1:res@Number){
       logr <- res@RowxNumber[,i]
       logc <- res@NumberxCol[i,]
-      fun_mat_prova <- fun_mat[logr,logc,]
+      fun_mat_prova <- array(fun_mat[logr,logc,],dims=c(sum(logr),sum(logc),dim(fun_mat)[3]))
       dist_mat <- FunCC:::evaluate_mat_dist(fun_mat_prova,param$template.type, param$alpha, param$beta, param$const_alpha, param$const_beta, param$shift.alignement, param$shift.max, param$max.iter)
       h_score <- FunCC:::ccscore_fun(dist_mat)
       dim <- sum(res@RowxNumber[,i])*sum(res@NumberxCol[i,])
