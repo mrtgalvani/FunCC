@@ -88,10 +88,13 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
       Htot_sum <- c(Htot_sum,NA)
       num_clust <- c(num_clust,0)
       not_assigned <- c(not_assigned,nrow(fun_mat)*ncol(fun_mat))}
+    
     if(res_fun@Number==1){
-      fun_mat_cl <- fun_mat[c(res_fun@RowxNumber),c(res_fun@NumberxCol),]
+      fun_mat_cl <- array(fun_mat[c(res_fun@RowxNumber),c(res_fun@NumberxCol),],dim=c(sum(c(res_fun@RowxNumber)),sum(c(res_fun@NumberxCol)),dim(fun_mat)[3]))
+
       dist_mat <- evaluate_mat_dist(fun_mat_cl,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align)
-      H_cl <- (ccscore_fun(dist_mat))
+      H_cl<-ccscore_fun(dist_mat)
+
       elements <- nrow(fun_mat)*ncol(fun_mat)
       elements <- elements-nrow(fun_mat_cl)*ncol(fun_mat_cl)
       not_assigned <- c(not_assigned,elements)
@@ -106,10 +109,14 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
       H_cl <- numeric()
       elements <- nrow(fun_mat)*ncol(fun_mat)
       for(c in 1:res_fun@Number){
-        #xy <- t(rep.row(res_fun@RowxNumber[,c],ncol(fun_mat)))*rep.row(res_fun@NumberxCol[c,],nrow(fun_mat))
-        fun_mat_cl <- fun_mat[res_fun@RowxNumber[,c],res_fun@NumberxCol[c,],]
-        dist_mat <- evaluate_mat_dist(fun_mat_cl,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align)
-        H_cl <- c(H_cl,ccscore_fun(dist_mat))
+
+        dist_mat <- evaluate_mat_dist(array(fun_mat[c(res_fun@RowxNumber[,cl]),c(res_fun@NumberxCol[cl,]),],dim=c(sum(c(res_fun@RowxNumber[,cl])),sum(c(res_fun@NumberxCol[cl,])),dim(fun_mat)[1])),template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align)
+        H_cl_temp<-ccscore_fun(dist_mat)
+        
+        H_cl <- c(H_cl,H_cl_temp)
+
+        fun_mat_cl <- array(fun_mat[c(res_fun@RowxNumber[,cl]),c(res_fun@NumberxCol[cl,]),],dim=c(sum(c(res_fun@RowxNumber[,cl])),sum(c(res_fun@NumberxCol[cl,])),dim(fun_mat)[3]))
+        
         elements <- elements-nrow(fun_mat_cl)*ncol(fun_mat_cl)
       }
       not_assigned <- c(not_assigned,elements)

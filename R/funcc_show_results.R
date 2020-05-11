@@ -89,7 +89,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
     warping_aligned=data.frame()
 
     if(res@Number==1){
-      clust_cl=fun_mat[which(c(res@RowxNumber)==T),which(c(res@NumberxCol)==T),]
+      clust_cl=array(fun_mat[which(c(res@RowxNumber)==T),which(c(res@NumberxCol)==T),],dim=c(sum(res@RowxNumber),sum(res@NumberxCol),dim(fun_mat)[3]))
       res_aligned=warping_function_plot(res,clust_cl,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter)
 
       array_aligned=res_aligned$fun_mat_align
@@ -124,7 +124,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
 
     if(res@Number>1){
       for(cl in 1:res@Number){
-        clust_cl=fun_mat[which(res@RowxNumber[,cl]==T),which(res@NumberxCol[cl,]==T),]
+        clust_cl=array(fun_mat[which(res@RowxNumber[,cl]==T),which(res@NumberxCol[cl,]==T),],dim=c(sum(res@RowxNumber[,cl]),sum(res@NumberxCol[cl,]),dim(fun_mat)[3]))
         res_aligned=warping_function_plot(res,clust_cl,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter)
 
         array_aligned=res_aligned$fun_mat_align
@@ -315,7 +315,7 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
     template.mean = data.frame()
 
     if(res@Number==1){
-      clust_cl=fun_mat[which(c(res@RowxNumber)==T),which(c(res@NumberxCol)==T),]
+      clust_cl=array(fun_mat[which(c(res@RowxNumber)==T),which(c(res@NumberxCol)==T),],dim=c(sum(res@RowxNumber),sum(res@NumberxCol),dim(fun_mat)[3]))
       if(template.type=='mean'){new_fun_cl <- template_evaluation(clust_cl,alpha,beta,const_alpha,const_beta)}
       if(template.type=='medoid'){new_fun_cl <- medoid_evaluation(clust_cl,alpha,beta,const_alpha,const_beta)}
       #new_fun_cl=template_evaluation(clust_cl,a,b,const_a,const_b)
@@ -336,8 +336,8 @@ funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F
     }
     if(res@Number>1){
       for(cl in 1:res@Number){
-        clust_cl=fun_mat[which(res@RowxNumber[,cl]==T),which(res@NumberxCol[cl,]==T),]
-
+        clust_cl=array(fun_mat[which(res@RowxNumber[,cl]==T),which(res@NumberxCol[cl,]==T),],dim=c(sum(res@RowxNumber[,cl]),sum(res@NumberxCol[cl,]),dim(fun_mat)[3]))
+        
         # new_fun_cl=template_evaluation(clust_cl,a,b,const_a,const_b)
 
         if(template.type=='mean'){new_fun_cl <- template_evaluation(clust_cl,alpha,beta,const_alpha,const_beta)}

@@ -15,10 +15,10 @@ medoid_evaluation <- function(fun_mat,a,b,const_a,const_b){
   n=dim(fun_mat)[1]# numero di righe
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
-
+  
   fun_per_medoid=NULL
   for(j in 1:dim(fun_mat)[1]){
-    fun_per_medoid=rbind(fun_per_medoid,fun_mat[j,,])
+    fun_per_medoid=rbind(fun_per_medoid,matrix(fun_mat[j,,],nrow=m,ncol=p))
   }
   # calcolo le distanze euclidee tra tutte le funzioni
   #dist <- distNumeric(fun_per_medoid, fun_per_medoid, method = "se")
@@ -29,15 +29,14 @@ medoid_evaluation <- function(fun_mat,a,b,const_a,const_b){
   # trovo la funzione medoide con somma delle distanze minima
   rep_curve <- which(sum_dist==min(sum_dist,na.rm=T))[1]
   medoid_fun <- fun_per_medoid[rep_curve,]
-
+  
   # costruisco l'array da fun_medoid n x m x p
   new_fun = array(medoid_fun, dim=c(1,1,p))
   new_fun = narray::rep(new_fun, n, along = 1)
   new_fun = narray::rep(new_fun, m, along = 2)
-
+  
   new_fun
 }
-
 #' medoid_evaluation_add evaluates the medoid template function
 #' @noRd
 #' @keywords Internal
@@ -45,30 +44,30 @@ medoid_evaluation_add <- function(fun_mat,logr,logc,a,b,const_a,const_b){
   n=dim(fun_mat)[1]# numero di righe
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
-
-  fun_mat <- fun_mat[logr,logc,]
-
+  
+  fun_mat <- array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),p))
+  
   fun_per_medoid=NULL
   for(j in 1:dim(fun_mat)[1]){
-    fun_per_medoid=rbind(fun_per_medoid,fun_mat[j,,])
+    fun_per_medoid=rbind(fun_per_medoid,matrix(fun_mat[j,,],nrow=sum(logc),ncol=p))
   }
-
+  
   # calcolo le distanze euclidee tra tutte le funzioni
   distance <- as.matrix(stats::dist(fun_per_medoid))
   distance <- distance^2
   diag(distance) <- NA
-
-
+  
+  
   sum_dist <- colMeans(distance,na.rm=T)
   # trovo la funzione medoide con somma delle distanze minima
   rep_curve <- which(sum_dist==min(sum_dist,na.rm=T))[1]
   medoid_fun <- fun_per_medoid[rep_curve,]
-
+  
   # costruisco l'array da fun_medoid n x m x p
   new_fun = array(medoid_fun, dim=c(1,1,p))
   new_fun = narray::rep(new_fun, n, along = 1)
   new_fun = narray::rep(new_fun, m, along = 2)
-
+  
   new_fun
 }
 
@@ -79,56 +78,56 @@ template_evaluation <- function(fun_mat,a,b,const_a,const_b){
   n=dim(fun_mat)[1]# numero di righe
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
-
+  
   count_null <- apply(fun_mat, c(1,2), function(x) sum(is.na(x)))
   not_null <- count_null < dim(fun_mat)[3]
-
+  
   #print(dim(fun_mat))
   fun_mean=colMeans(fun_mat, dims = 2,na.rm=T)  # 1 x p # calcolo la funzione media della fun_matrice
-
+  
   #calcolo alpha - componente riga
   alpha_fun=NULL
-
+  
   for(j in 1:n){
-    alpha_fun=rbind(alpha_fun,colSums(fun_mat[j,,],na.rm=T)/sum(not_null[j,]))
+    alpha_fun=rbind(alpha_fun,colSums(matrix(fun_mat[j,,],nrow=m,ncol=p),na.rm=T)/sum(not_null[j,]))
   }
   #dim(alpha_fun) #  n x p
   alpha_fun=alpha_fun-matrix(fun_mean,nrow=n,ncol=length(fun_mean),byrow=TRUE)
-
+  
   if(const_a){
     alpha_fun = rowMeans(alpha_fun,na.rm=T) # 1 x n
     alpha_fun = array(alpha_fun,dim=c(n,1,1)) # n x 1 x 1
     alpha_fun = narray::rep(alpha_fun, p, along = 3) # n x p
   }
-
+  
   # calcolo beta - componente colonna
   beta_fun=NULL
   for(j in 1:m){
-    beta_fun=rbind(beta_fun,(colSums(fun_mat[,j,],dims = 1,na.rm=T)/sum(not_null[,j]))) # m x p
+    beta_fun=rbind(beta_fun,(colSums(matrix(fun_mat[,j,],nrow=n,ncol=p),dims = 1,na.rm=T)/sum(not_null[,j]))) # m x p
   }
   beta_fun=beta_fun-matrix(fun_mean,nrow=m,ncol=length(fun_mean),byrow=TRUE) # m x p
-
+  
   if(const_b){
     beta_fun=rowMeans(beta_fun,na.rm=T) # 1 x m
     beta_fun = array(beta_fun,dim=c(1,m,1)) # 1 x m x 1
     beta_fun = narray::rep(beta_fun, p, along = 3) # m x p
   }
-
+  
   # costruisco l'array da fun_mean n x m x p
   fun_mean_mat = array(fun_mean, dim=c(1,1,p))
   fun_mean_mat = narray::rep(fun_mean_mat, n, along = 1)
   fun_mean_mat = narray::rep(fun_mean_mat, m, along = 2)
-
+  
   # costruisco l'array da beta_fun n x m x p
   beta_fun_mat = array(beta_fun,dim=c(1,m,p))
   beta_fun_mat = narray::rep(beta_fun_mat, n, along = 1)
   beta_fun_mat[is.na(beta_fun_mat)] <- 0
-
+  
   # costruisco l'array da alpha_fun n x m x p
   alpha_fun_mat = array(alpha_fun,dim=c(n,1,p))
   alpha_fun_mat = narray::rep(alpha_fun_mat, m, along = 2)
   alpha_fun_mat[is.na(alpha_fun_mat)] <- 0
-
+  
   new_fun = fun_mean_mat+b*beta_fun_mat+a*alpha_fun_mat
   new_fun
 }
@@ -140,58 +139,58 @@ template_evaluation_add <- function(fun_mat,logr,logc,a,b,const_a,const_b){
   n=dim(fun_mat)[1]# numero di righe
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
-
+  
   count_null <- apply(fun_mat, c(1,2), function(x) sum(is.na(x)))
   not_null <- count_null < dim(fun_mat)[3]
-
-  fun_mean=colMeans(fun_mat[logr,logc,], dims = 2,na.rm=T)  # 1 x p # calcolo la funzione media della fun_matrice
-
+  
+  fun_mean=colMeans(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),p)), dims = 2,na.rm=T)  # 1 x p # calcolo la funzione media della fun_matrice
+  
   #calcolo alpha - componente riga
   alpha_fun=NULL
   for(j in 1:n){
-    alpha_fun=rbind(alpha_fun,colSums(fun_mat[j,logc,],na.rm=T)/sum(not_null[j,logc],na.rm=T))
+    alpha_fun=rbind(alpha_fun,colSums(matrix(fun_mat[j,logc,],nrow=sum(logc),ncol=p),na.rm=T)/sum(not_null[j,logc],na.rm=T))
   }
   #dim(alpha_fun) #  n x p
   alpha_fun=alpha_fun-matrix(fun_mean,nrow=n,ncol=length(fun_mean),byrow=TRUE)
-
+  
   if(const_a){
     alpha_fun = rowMeans(alpha_fun,na.rm=T) # 1 x n
     alpha_fun = array(alpha_fun,dim=c(n,1,1)) # n x 1 x 1
     alpha_fun = narray::rep(alpha_fun, p, along = 3) # n x p
-
+    
   }
-
-
+  
+  
   # calcolo beta - componente colonna
   beta_fun=NULL
   for(j in 1:m){
-    beta_fun=rbind(beta_fun,(colSums(fun_mat[logr,j,],na.rm=T)/sum(not_null[logr,j],na.rm=T))) # m x p
+    beta_fun=rbind(beta_fun,(colSums(matrix(fun_mat[logr,j,],nrow=sum(logr),ncol=p),na.rm=T)/sum(not_null[logr,j],na.rm=T))) # m x p
   }
   beta_fun=beta_fun-matrix(fun_mean,nrow=m,ncol=length(fun_mean),byrow=TRUE) # m x p
-
-
+  
+  
   if(const_b){
     beta_fun=rowMeans(beta_fun,na.rm=T) # 1 x m
     beta_fun = array(beta_fun,dim=c(1,m,1)) # 1 x m x 1
     beta_fun = narray::rep(beta_fun, p, along = 3) # m x p
   }
-
-
+  
+  
   # costruisco l'array da fun_mean n x m x p
   fun_mean_mat = array(fun_mean, dim=c(1,1,p))
   fun_mean_mat = narray::rep(fun_mean_mat, n, along = 1)
   fun_mean_mat = narray::rep(fun_mean_mat, m, along = 2)
-
+  
   # costruisco l'array da beta_fun n x m x p
   beta_fun_mat = array(beta_fun,dim=c(1,m,p))
   beta_fun_mat = narray::rep(beta_fun_mat, n, along = 1)
   beta_fun_mat[is.na(beta_fun_mat)] <- 0
-
+  
   # costruisco l'array da alpha_fun n x m x p
   alpha_fun_mat = array(alpha_fun,dim=c(n,1,p))
   alpha_fun_mat = narray::rep(alpha_fun_mat, m, along = 2)
   alpha_fun_mat[is.na(alpha_fun_mat)] <- 0
-
+  
   new_fun = fun_mean_mat+b*beta_fun_mat+a*alpha_fun_mat
   new_fun
 }
@@ -207,15 +206,15 @@ evaluate_mat_dist <- function(fun_mat,template.type,a,b,const_a,const_b,shift.al
   n=dim(fun_mat)[1]# numero di righe
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
-
+  
   if(shift.alignement!=F){
     mat_dist=warping_function(fun_mat,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
   }
-
+  
   else{
     if(template.type=='mean'){    new_fun <- template_evaluation(fun_mat,a,b,const_a,const_b)}
     if(template.type=='medoid'){    new_fun <- medoid_evaluation(fun_mat,a,b,const_a,const_b)}
-
+    
     mat_dist <- rowSums((fun_mat-new_fun)^2,dims = 2)/p
   }
   mat_dist#/(max(fun_mat)+1)/(sd(fun_mat)+1) #!!!!!!!
@@ -225,18 +224,20 @@ evaluate_mat_dist <- function(fun_mat,template.type,a,b,const_a,const_b,shift.al
 #' @noRd
 #' @keywords Internal
 evaluate_mat_dist_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter){
+  
+  
   n=dim(fun_mat)[1]# numero di righe
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
-
+  
   if(shift.alignement!=F){
     mat_dist=warping_function_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
   }
-
+  
   else{
     if(template.type=='mean'){new_fun <- template_evaluation_add(fun_mat,logr,logc,a,b,const_a,const_b)}
     if(template.type=='medoid'){new_fun <- medoid_evaluation_add(fun_mat,logr,logc,a,b,const_a,const_b)}
-
+    
     mat_dist <- rowSums((fun_mat-new_fun)^2,dims = 2)/p
   }
   mat_dist#/(max(fun_mat[logr,logc,])+1)/(sd(fun_mat[logr,logc,])+1)  #!!!!!!!
@@ -282,22 +283,22 @@ colscore_fun<-function(mat_dist){
 #' @noRd
 #' @keywords Internal
 addrowscore_fun<-function(mat_dist,logc){
-
+  
   #m=dim(mat_dist)[2] # numero di colonne
-
-  score_fun = rowMeans(mat_dist[,logc],na.rm=T)#rowSums(mat_dist,na.rm=T)/(m)
-
+  
+  score_fun = rowMeans(matrix(mat_dist[,logc],nrow=dim(mat_dist)[1],ncol=sum(logc)),na.rm=T)#rowSums(mat_dist,na.rm=T)/(m)
+  
   score_fun
-
+  
 }
 
 #' addcolscore_fun find col score when adding a col
 #' @noRd
 #' @keywords Internal
 addcolscore_fun<-function(mat_dist,logr){
-
-  score_fun = colMeans(mat_dist[logr,],na.rm=T)#colSums(mat_dist,na.rm=T)/(n)
-
+  
+  score_fun = colMeans(matrix(mat_dist[logr,],nrow=sum(logr),ncol=dim(mat_dist)[2]),na.rm=T)#colSums(mat_dist,na.rm=T)/(n)
+  
   score_fun
   # vettore lungo tanto quanto le colonne (giorni)
   # mi serve per capire che colonna togliere
@@ -505,36 +506,48 @@ warping_function_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,con
 #' cc1_fun algorithm 1 from CC: Single Node Deletion
 #' @noRd
 #' @keywords Internal
-cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter){
-
-  dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-  score_while <- ccscore_fun(dist_mat)
+cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter,only.one){
+  
+  dist_mat <- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+  score_while<-ccscore_fun(dist_mat)
+  
 
   #i <- 1
   while(score_while>delta)
   {
-
+    logr[logr==T] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    logc[logc==T] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    
     di<-rowscore_fun(dist_mat)
+    
     dj<-colscore_fun(dist_mat)
+    
+
     mdi<-which.max(di)
     mdj<-which.max(dj)
-
+    
     ifelse(di[mdi]>dj[mdj] ,logr[logr][mdi]<-FALSE ,logc[logc][mdj]<-FALSE)
-
+    
+    logr[logr==T] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    logc[logc==T] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    
     ##print(logr)
-    if (!(sum(logr)>1 & sum(logc)>1))
-      break
-
+    if(only.one=='False' & !(sum(logr)>1 & sum(logc)>1)){break}
+    if (only.one=='True' & !((sum(logr)>=1 & sum(logc)>1) | (sum(logr)>1 & sum(logc)>=1))){break}
+    if(only.one=='True_alpha' & !(sum(logr)>=1 & sum(logc)>1)){break}
+    if (only.one=='True_beta' & !(sum(logr)>1 & sum(logc)>=1)){break}
+    
     #print(sum(logr))
     #print(sum(logc))
-    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-    #print(dist_mat)
-    score_while <- ccscore_fun(dist_mat)
-    #print(score_while)
-
-
+    dist_mat <- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+    score_while<-ccscore_fun(dist_mat)
+    
+    
   }
-  ifelse(sum(logr)>1 & sum(logc)>1,ret<-list(logr,logc),ret<-list(0,warning(paste('No fun_matirx with score smaller', delta,'found'))))
+  if(only.one=='False'){ifelse(sum(logr)>1 & sum(logc)>1,ret<-list(logr,logc),ret<-list(0,warning(paste('No submatrix with score smaller', delta,'found'))))}
+  if(only.one=='True'){ifelse((sum(logr)>=1 & sum(logc)>1) | (sum(logr)>1 & sum(logc)>=1),ret<-list(logr,logc),ret<-list(0,warning(paste('No submatrix with score smaller', delta,'found'))))}
+  if(only.one=='True_alpha'){ifelse(sum(logr)>=1 & sum(logc)>1,ret<-list(logr,logc),ret<-list(0,warning(paste('No submatrix with score smaller', delta,'found'))))}
+  if(only.one=='True_beta'){ifelse((sum(logr)>1 & sum(logc)>=1),ret<-list(logr,logc),ret<-list(0,warning(paste('No submatrix with score smaller', delta,'found'))))}
   ret
 }
 
@@ -544,21 +557,32 @@ cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shif
 cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter){
   mdi<-1
   mdj<-1
-  dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+  
+  
+  dist_mat<- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
   h<-ccscore_fun(dist_mat)
+  
 
   while(h>delta & (sum(mdi,na.rm=T)+sum(mdj,na.rm=T))>0)
   {
-
+    
     if(sum(logr)>100)
     {
+      
+      
+      #dist_mat <- evaluate_mat_dist(fun_mat[[num_list]][logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
       di<-rowscore_fun(dist_mat)
+      
+      
       mdi<-di>(theta*h)
       if(sum(mdi,na.rm=T) < (sum(logr[!is.na(mdi)],na.rm=T)-1))
       {
         logr[logr][mdi]<-FALSE
-        dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+
+        dist_mat <- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
         h<-ccscore_fun(dist_mat)
+        
+        
       }
       else
       {
@@ -567,29 +591,40 @@ cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_
       }
     }
     else{mdi<-0}
-
-
+    
+    
     if(sum(logc)>100)
     {
+      
+      
+      #dist_mat <- evaluate_mat_dist(fun_mat[[num_list]][logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
       dj<-colscore_fun(dist_mat)
+     
       mdj<-dj>(theta*h)
       if(sum(mdj,na.rm=T) < (sum(logc[!is.na(mdj)])-1))
       {
         logc[logc][mdj]<-FALSE
-        dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+        
+        
+        dist_mat <- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+        
+        
+        #dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
       }
       else
       {
-
+        
         print(warning(paste('theta', theta,'to small!')))
         mdi <- 0
       }
     }
     else{mdj<-0}
-
-    h<-ccscore_fun(dist_mat)
+    
+   
+    h <- ccscore_fun(dist_mat)
+   
   }
-
+  
   ret<-list(logr,logc)
   ret
 }
@@ -602,39 +637,53 @@ cc3_fun<-function(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alig
   ilogr<-rep(FALSE,length(logr))
   while(br>0)
   {
-
+    
     # dist mat
-    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
+   
+    dist_mat <- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+    h<-ccscore_fun(dist_mat)
+  
+    
     br1<-sum(logc)
     br2<-sum(logr)
-    h<-ccscore_fun(dist_mat)
     #print(paste0('h: ',h))
-
+    
+   
     dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
     dj<-addcolscore_fun(dist_mat_add,logr)
+    
+    #dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+    #dj<-addcolscore_fun(dist_mat_add,logr)
     #print(dj)
-
+    
     mdj<-dj<=h
     logc[mdj]<-TRUE
-
-    dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
+    
+    
+    dist_mat<- evaluate_mat_dist(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),dim(fun_mat)[3])),template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
     h<-ccscore_fun(dist_mat)
-
+  
+    #dist_mat <- evaluate_mat_dist(fun_mat[logr,logc,],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+    
+    #h<-ccscore_fun(dist_mat)
+    
+    
     dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-
     di<-addrowscore_fun(dist_mat_add,logc)
-
+   
+    
+    #dist_mat_add <- evaluate_mat_dist_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+    
+    #di<-addrowscore_fun(dist_mat_add,logc)
+    
     mdi<-di<=h
     logr[mdi]<-TRUE
-
+    
     br<-sum(logc)+sum(logr)-br1-br2
   }
   ret<-list(logr,logc)
   ret
-
+  
 }
 
 ########################################
@@ -643,33 +692,33 @@ cc3_fun<-function(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alig
 #' bigcc_fun Finds biggest Bicluster
 #' @noRd
 #' @keywords Internal
-bigcc_fun<-function(fun_mat,delta,theta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter){
-
+bigcc_fun<-function(fun_mat,delta,theta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter,only.one){
+  
   n=dim(fun_mat)[1]
   m=dim(fun_mat)[2]
   p=dim(fun_mat)[3]
-
+  
   logr<-rep(TRUE,n)
-  logr[rowSums(is.na(fun_mat[,,1]))==dim(fun_mat)[2]] <- FALSE
+  logr[rowSums(is.na(matrix(fun_mat[,,1],nrow=n,ncol=m)))==dim(fun_mat)[2]] <- FALSE
   logc<-rep(TRUE,m)
-  logc[colSums(is.na(fun_mat[,,1]))==dim(fun_mat)[1]] <- FALSE
-
+  logc[colSums(is.na(matrix(fun_mat[,,1],nrow=n,ncol=m)))==dim(fun_mat)[1]] <- FALSE
+  
   # if(sum(logr)<=1 | sum(logc)<=1){
   #   ret<-list(0,warning(paste('Mo fun_matrix with score smaller than', delta,'found')))
   #   ret
   #   break
   # }
-
-  #print('cc2')
+  
+  #multiple
   step1<-cc2_fun(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
-  #print('cc1')
-  step2<-cc1_fun(fun_mat,step1[[1]],step1[[2]],delta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
+  #single
+  step2<-cc1_fun(fun_mat,step1[[1]],step1[[2]],delta,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter,only.one)
   if(sum(step2[[1]])==0)
   {ret<-list(0,warning(paste('Mo fun_matrix with score smaller than', delta,'found')))
   }
   else{
     #print('cc3')
-
+    
     ret<-cc3_fun(fun_mat,step2[[1]],step2[[2]],template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
   }
   ret

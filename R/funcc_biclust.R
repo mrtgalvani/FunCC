@@ -65,9 +65,14 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
   count_null <- apply(fun_mat, c(1,2), function(x) sum(is.na(x)))
   not_null <- count_null < dim(fun_mat)[3]
 
-
   parameter_input <- data.frame(delta=delta,theta=theta,template.type=template.type,alpha=alpha,beta=beta,const_alpha=const_alpha,const_beta=const_beta,shift.alignement=shift.alignement,shift.max=shift.max,max.iter.align=max.iter.align)
 
+  only.one <- ifelse(alpha==0 & beta==0,'True',
+                     ifelse(alpha==0 & beta!=0, 'True_beta',
+                            ifelse(alpha!=0 & beta==0,'True_alpha',
+                                   ifelse(alpha!=0 & beta!=0,'False',NA))))
+  
+  
   n=dim(fun_mat)[1]
   m=dim(fun_mat)[2]
   p=dim(fun_mat)[3]
@@ -93,23 +98,63 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
   {
     print(i)
     # tolgo righe e colonne interamente a null
-    logr[logr==T] <- ifelse(rowSums(is.na(fun_mat[logr,logc,1]))==sum(logc),F,T)
-
-    if(sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)
+    # qui
+    logr[logr==T] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    
+    if(only.one=='False' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)) # non voglio che ci sia una sola riga o una sola colonna
     {
       Stop <- TRUE
       break
     }
-
-    #logr[rowSums(is.na(fun_mat[logr,logc,1]))==sum(logc)] <- FALSE
-    logc[logc==T] <- ifelse(colSums(is.na(fun_mat[logr,logc,1]))==sum(logr),F,T)
-    #logc[colSums(is.na(fun_mat[logr,logc,1]))==sum(logr)] <- FALSE
-    if(sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)
+    
+    if(only.one=='True' & (sum(1-xy)<2 | sum(logr)<1 | sum(logc)<1)) # non voglio che non ci siano più righe e colonne
     {
       Stop <- TRUE
       break
     }
-    erg<-bigcc_fun(fun_mat[logr,logc,],delta,theta,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align) # lista che ritorna assegnazione righe e colonne
+    
+    if(only.one=='True_alpha' & (sum(1-xy)<2 | sum(logr)<1 | sum(logc)<=1)) # ok singole righe ma non singole colonne
+    {
+      Stop <- TRUE
+      break
+    }
+    if(only.one=='True_beta' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<1)) # ok singole colonne ma non singole righe
+    {
+      Stop <- TRUE
+      break
+    }
+    
+    
+    logc[logc==T] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+
+    if(only.one=='False' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)) # non voglio che ci sia una sola riga o una sola colonna
+    {
+      Stop <- TRUE
+      break
+    }
+    
+    if(only.one=='True' & (sum(1-xy)<2 | sum(logr)<1 | sum(logc)<1)) # non voglio che non ci siano più righe e colonne
+    {
+      Stop <- TRUE
+      break
+    }
+    
+    if(only.one=='True_alpha' & (sum(1-xy)<2 | sum(logr)<1 | sum(logc)<=1)) # ok singole righe ma non singole colonne
+    {
+      Stop <- TRUE
+      break
+    }
+    if(only.one=='True_beta' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<1)) # ok singole colonne ma non singole righe
+    {
+      Stop <- TRUE
+      break
+    }
+    
+    fun_mat_temp <- fun_mat
+    fun_mat_temp <- array(fun_mat_temp[logr,logc,],dim = c(sum(logr),sum(logc),dim(fun_mat)[3]))
+    erg<-bigcc_fun(fun_mat_temp,delta,theta,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align,only.one) # lista che ritorna assegnazione righe e colonne
+    
+    #erg<-bigcc_fun(fun_mat[logr,logc,],delta,theta,template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align) # lista che ritorna assegnazione righe e colonne
     n_clust <- n_clust-1
     if(sum(erg[[1]])==0 & n_clust==0 | sum(erg[[1]])==0 & i==1)
     {
@@ -136,16 +181,42 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
 
 
       #trovo le sottomatrici
-      res <- biclust::biclust(1-xy, method=biclust::BCBimax(), minr=2, minc=2, number=100)
+      if(only.one=='False'){ res <- biclust::biclust(1-xy, method=biclust::BCBimax(), minr=2, minc=2, number=100)}
+      if(only.one=='True'){res <- biclust::biclust(1-xy, method=biclust::BCBimax(), minr=1, minc=1, number=100)}
+      if(only.one=='True_alpha'){res <- biclust::biclust(1-xy, method=biclust::BCBimax(), minr=1, minc=2, number=100)}
+      if(only.one=='True_beta'){res <- biclust::biclust(1-xy, method=biclust::BCBimax(), minr=2, minc=1, number=100)}
+      
+      
       n_clust <- res@Number
       cl <- 1
-
+      
       if(n_clust==0){#i <- i+1
         Stop <- TRUE
         break}
 
       clus_row <- res@RowxNumber
       clus_col <- res@NumberxCol
+      
+      # valuto le dimensioni dei cluster
+      dimensioni <- colSums(clus_row) * rowSums(clus_col)
+      
+      # trovo quelli a dimensione 1 e li tolgo
+      if_oneone <- which(dimensioni>1) # cluster con dimensioni > 1
+      
+      if(length(if_oneone)==0)
+      {Stop <- TRUE
+      break}
+      
+      if(length(if_oneone)!=n_clust){
+        n_clust <- length(if_oneone) 
+        clus_row <- matrix(clus_row[,if_oneone],nrow=nrow(clus_row),ncol=n_clust)
+        clus_col <- matrix(clus_col[if_oneone,],nrow=n_clust,ncol=ncol(clus_col))
+      }
+      
+
+      if(n_clust==0){#i <- i+1
+        Stop <- TRUE
+        break}
 
       # ordino le sottomatrici per dimensione
       if(n_clust>1){
