@@ -6,6 +6,8 @@
 #' @return a figure representing the dimensions of each bi-cluster (i.e. number of rows and columns)
 #'
 funcc_show_bicluster_dimension <- function(fun_mat,res_input){
+  
+  cl <- n_element <- NULL
 
   col_palette = c(RColorBrewer::brewer.pal(9, 'Set1'),
                   RColorBrewer::brewer.pal(12, 'Set3'),

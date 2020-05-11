@@ -9,6 +9,8 @@
 
 funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=T,max_coverage=1){
 
+  cl <- perc <- type <- cum_perc <- NULL
+  
   res <- res_input[[1]]
 
   if(max_coverage>1){

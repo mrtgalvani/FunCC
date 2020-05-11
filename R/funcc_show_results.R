@@ -9,6 +9,8 @@
 #' @return a figure representing each bi-cluster in terms of functions contained in it or templates
 
 funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F){
+  
+  variable <- value <- obs <- cluster <- obj <- NULL
 
   res = res_input[[1]]
   alpha=res_input$parameter$alpha

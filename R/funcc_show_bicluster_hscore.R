@@ -8,6 +8,8 @@
 #'
 funcc_show_bicluster_hscore <- function(fun_mat,res_input){
   
+  biclust_n <- NULL
+  
   col_palette = c(RColorBrewer::brewer.pal(9, 'Set1'),
                   RColorBrewer::brewer.pal(12, 'Set3'),
                   RColorBrewer::brewer.pal(8, 'Set2'),
@@ -46,8 +48,8 @@ funcc_show_bicluster_hscore <- function(fun_mat,res_input){
       logr <- res@RowxNumber[,i]
       logc <- res@NumberxCol[i,]
       fun_mat_prova <- array(fun_mat[logr,logc,],dim = c(sum(logr),sum(logc),dim(fun_mat)[3]))
-      dist_mat <- FunCC:::evaluate_mat_dist(fun_mat_prova,param$template.type, param$alpha, param$beta, param$const_alpha, param$const_beta, param$shift.alignement, param$shift.max, param$max.iter)
-      h_score <- FunCC:::ccscore_fun(dist_mat)
+      dist_mat <- evaluate_mat_dist(fun_mat_prova,param$template.type, param$alpha, param$beta, param$const_alpha, param$const_beta, param$shift.alignement, param$shift.max, param$max.iter)
+      h_score <- ccscore_fun(dist_mat)
       dim <- sum(res@RowxNumber[,i])*sum(res@NumberxCol[i,])
       biclust_i <- data.frame(biclust_n=i,h_score=h_score,dim=dim)
       biclust <- rbind(biclust,biclust_i)

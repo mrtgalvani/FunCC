@@ -36,13 +36,13 @@ funcc_biclust(
 
 \item{const_alpha}{logicol: Indicates if row shift is contrained as constant.}
 
+\item{const_beta}{logicol: Indicates if col shift is contrained as constant.}
+
 \item{shift.alignement}{logicol: If shift.alignement=True the shift aligment is performed, if shift.alignement=False no alignment is performed}
 
 \item{shift.max}{scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1}
 
 \item{max.iter.align}{integer: maximum number of iteration in the alignment procedure}
-
-\item{const_b}{logicol: Indicates if col shift is contrained as constant.}
 }
 \value{
 a list of two elements containing respectively the Biclustresults and a dataframe containing the parameters setting of the algorithm

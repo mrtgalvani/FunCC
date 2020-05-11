@@ -9,7 +9,7 @@
 #' @param alpha binary: if alpha=1 row shift is allowed, if alpha=0 row shift is avoided
 #' @param beta binary: if beta=1 row shift is allowed, if beta=0 row shift is avoided
 #' @param const_alpha logicol: Indicates if row shift is contrained as constant.
-#' @param const_b logicol: Indicates if col shift is contrained as constant.
+#' @param const_beta logicol: Indicates if col shift is contrained as constant.
 #' @param shift.alignement logicol: If shift.alignement=True the shift aligment is performed, if shift.alignement=False no alignment is performed
 #' @param shift.max scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1
 #' @param max.iter.align integer: maximum number of iteration in the alignment procedure

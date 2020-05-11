@@ -3,7 +3,7 @@
 #' @export
 #' @param fun_mat The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
 #' @param delta_min scalar: Manimum value of the maximum of accepted score, should be a real value > 0
-#' @param delta_min scalar: Maximum value of the maximum of accepted score, should be a real value > 0
+#' @param delta_max scalar: Maximum value of the maximum of accepted score, should be a real value > 0
 #' @param num_delta integer: number of delta to be evaluated between delta_min and delta_max
 #' @param theta scalar: Scaling factor should be a real value > 1
 #' @param template.type character: type of template required. If template.type='mean' the template is evaluated as the average function, if template.type='medoid' the template is evaluated as the medoid function.
@@ -11,7 +11,7 @@
 #' @param alpha binary: if alpha=1 row shift is allowed, if alpha=0 row shift is avoided
 #' @param beta binary: if beta=1 row shift is allowed, if beta=0 row shift is avoided
 #' @param const_alpha logicol: indicates if row shift is contrained as constant
-#' @param const_b logicol: indicates if col shift is contrained as constant
+#' @param const_beta logicol: indicates if col shift is contrained as constant
 #' @param shift.alignement logicol: If shift.alignement=True the shift aligment is performed, if shift.alignement=False no alignment is performed
 #' @param shift.max scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1
 #' @param max.iter.align integer: maximum number of iteration in the alignment procedure
@@ -68,6 +68,8 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
     stop('Error: delta_max must be a number greater than delta_min')
     }
 
+  
+  cl <- delta <- NULL
   delta_check <- seq(delta_min,delta_max,(delta_max-delta_min)/num_delta)
 
   Htot_best <- delta_max

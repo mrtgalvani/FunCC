@@ -6,6 +6,8 @@
 #' @return a figure representing the bi-clusters positions in the original data matrix
 
 funcc_show_block_matrix <- function(fun_mat,res_input){
+  
+  variable <- id <- value <- NULL
 
   col_palette = c(RColorBrewer::brewer.pal(9, 'Set1'),
                   RColorBrewer::brewer.pal(12, 'Set3'),

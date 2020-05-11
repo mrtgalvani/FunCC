@@ -24,7 +24,9 @@ find_best_delta(
 \arguments{
 \item{fun_mat}{The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T}
 
-\item{delta_min}{scalar: Maximum value of the maximum of accepted score, should be a real value > 0}
+\item{delta_min}{scalar: Manimum value of the maximum of accepted score, should be a real value > 0}
+
+\item{delta_max}{scalar: Maximum value of the maximum of accepted score, should be a real value > 0}
 
 \item{num_delta}{integer: number of delta to be evaluated between delta_min and delta_max}
 
@@ -40,13 +42,13 @@ find_best_delta(
 
 \item{const_alpha}{logicol: indicates if row shift is contrained as constant}
 
+\item{const_beta}{logicol: indicates if col shift is contrained as constant}
+
 \item{shift.alignement}{logicol: If shift.alignement=True the shift aligment is performed, if shift.alignement=False no alignment is performed}
 
 \item{shift.max}{scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1}
 
 \item{max.iter.align}{integer: maximum number of iteration in the alignment procedure}
-
-\item{const_b}{logicol: indicates if col shift is contrained as constant}
 }
 \value{
 a dataframe containing for each evaluated delta: Htot_sum (the sum of totale H-score), num_clust (the number of found Bi-clusters), not_assigned (the number of not assigned elements)
