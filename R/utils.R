@@ -724,18 +724,6 @@ bigcc_fun<-function(fun_mat,delta,theta,template.type,a,b,const_a,const_b,shift.
   ret
 }
 
-#' rep.row
-#' @noRd
-#' @keywords Internal
-rep.row<-function(x,n){
-  matrix(base::rep(x,each=n),nrow=n)
-}
-#' rep.col
-#' @noRd
-#' @keywords Internal
-rep.col<-function(x,n){
-  matrix(base::rep(x,each=n), ncol=n, byrow=TRUE)
-}
 
 #' warping_function_plot alignment function for figures
 #' @noRd

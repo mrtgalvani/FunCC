@@ -177,7 +177,10 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
       # mi indicano cosa è stato assegnato all'iterazione i-esima
       x[logr,k]<-erg[[1]]
       y[k,logc]<-erg[[2]] #26019
-      xy <-  xy + t(rep.row(x[,k],ncol(y)))*rep.row(y[k,],nrow(x)) # new aggiorno l'assegnazione elementi
+
+      xy <-  xy + t(matrix(base::rep(x[,k],each=ncol(y)),nrow=ncol(y))* matrix(base::rep(y[k,],each=nrow(x)),nrow=nrow(x)))
+
+      #xy <-  xy + t(rep.row(x[,k],ncol(y)))*rep.row(y[k,],nrow(x)) # new aggiorno l'assegnazione elementi
 
 
       #trovo le sottomatrici
