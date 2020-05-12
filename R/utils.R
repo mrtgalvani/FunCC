@@ -1,6 +1,6 @@
 
 library(narray)
-library(biclust)
+suppressWarnings(library(biclust))
 library(reshape)
 library(RColorBrewer)
 library(ggplot2)

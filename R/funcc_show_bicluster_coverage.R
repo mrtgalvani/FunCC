@@ -40,11 +40,11 @@ funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=T,max_c
    
     
     if(res@Number==1){#x_y=t(rep.row(c(res@RowxNumber),ncol(fun_mat)))*rep.row(c(res@NumberxCol),nrow(fun_mat))}
-      x_y=t(matrix(base::rep(c(res@RowxNumber),each=ncol(fun_mat)),nrow=ncol(fun_mat))*matrix(base::rep(c(res@NumberxCol),each=nrow(fun_mat)),nrow=nrow(fun_mat)))}
+      x_y=t(matrix(base::rep(c(res@RowxNumber),each=ncol(fun_mat)),nrow=ncol(fun_mat)))*matrix(base::rep(c(res@NumberxCol),each=nrow(fun_mat)),nrow=nrow(fun_mat))}
     if(res@Number>1){
       for( i in 1:res@Number){
         #xy=t(rep.row(res@RowxNumber[,i],ncol(fun_mat)))*rep.row(res@NumberxCol[i,],nrow(fun_mat))
-        xy=t(matrix(base::rep(res@RowxNumber[,i],each=ncol(fun_mat)),nrow=ncol(fun_mat))*matrix(base::rep(res@NumberxCol[i,],each=nrow(fun_mat)),nrow=nrow(fun_mat)))
+        xy=t(matrix(base::rep(res@RowxNumber[,i],each=ncol(fun_mat)),nrow=ncol(fun_mat)))*matrix(base::rep(res@NumberxCol[i,],each=nrow(fun_mat)),nrow=nrow(fun_mat))
         xy =xy*i
         x_y=x_y+xy
 
