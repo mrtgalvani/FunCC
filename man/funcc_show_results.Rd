@@ -23,3 +23,9 @@ a figure representing each bi-cluster in terms of functions contained in it or t
 \description{
 funcc_show_results graphically shows the results of the bi-clustering
 }
+\examples{
+ 
+data("funCCdata")
+res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+funcc_show_results(funCCdata,res)
+}

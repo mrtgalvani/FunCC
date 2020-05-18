@@ -16,8 +16,11 @@
 #' @param shift.max scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1
 #' @param max.iter.align integer: maximum number of iteration in the alignment procedure
 #' @return a dataframe containing for each evaluated delta: Htot_sum (the sum of totale H-score), num_clust (the number of found Bi-clusters), not_assigned (the number of not assigned elements)
+#' @examples  
+#' data("funCCdata")
+#' find_best_delta(funCCdata,delta_min=0.1,delta_max=20,num_delta=20,alpha=1,beta=0,const_alpha=TRUE)
 
-find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.type='mean',theta=1.5,number=100,alpha=0,beta=0,const_alpha=F,const_beta=F,shift.alignement=F,shift.max = 0.1, max.iter.align=100){
+find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.type='mean',theta=1.5,number=100,alpha=0,beta=0,const_alpha=FALSE,const_beta=FALSE,shift.alignement=FALSE,shift.max = 0.1, max.iter.align=100){
 
   if(length(dim(fun_mat))!=3){
     stop('Error: fun_mat should be an array of three dimensions')
@@ -110,7 +113,7 @@ find_best_delta <- function(fun_mat, delta_min,delta_max,num_delta=10,template.t
 
       H_cl <- numeric()
       elements <- nrow(fun_mat)*ncol(fun_mat)
-      for(c in 1:res_fun@Number){
+      for(cl in 1:res_fun@Number){
 
         dist_mat <- evaluate_mat_dist(array(fun_mat[c(res_fun@RowxNumber[,cl]),c(res_fun@NumberxCol[cl,]),],dim=c(sum(c(res_fun@RowxNumber[,cl])),sum(c(res_fun@NumberxCol[cl,])),dim(fun_mat)[1])),template.type,alpha,beta,const_alpha,const_beta,shift.alignement,shift.max, max.iter.align)
         H_cl_temp<-ccscore_fun(dist_mat)

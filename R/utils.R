@@ -25,9 +25,9 @@ medoid_evaluation <- function(fun_mat,a,b,const_a,const_b){
   distance <- as.matrix(stats::dist(fun_per_medoid))
   distance <- distance^2
   diag(distance) <- NA
-  sum_dist <- colMeans(distance,na.rm=T)
+  sum_dist <- colMeans(distance,na.rm=TRUE)
   # trovo la funzione medoide con somma delle distanze minima
-  rep_curve <- which(sum_dist==min(sum_dist,na.rm=T))[1]
+  rep_curve <- which(sum_dist==min(sum_dist,na.rm=TRUE))[1]
   medoid_fun <- fun_per_medoid[rep_curve,]
   
   # costruisco l'array da fun_medoid n x m x p
@@ -58,9 +58,9 @@ medoid_evaluation_add <- function(fun_mat,logr,logc,a,b,const_a,const_b){
   diag(distance) <- NA
   
   
-  sum_dist <- colMeans(distance,na.rm=T)
+  sum_dist <- colMeans(distance,na.rm=TRUE)
   # trovo la funzione medoide con somma delle distanze minima
-  rep_curve <- which(sum_dist==min(sum_dist,na.rm=T))[1]
+  rep_curve <- which(sum_dist==min(sum_dist,na.rm=TRUE))[1]
   medoid_fun <- fun_per_medoid[rep_curve,]
   
   # costruisco l'array da fun_medoid n x m x p
@@ -83,19 +83,19 @@ template_evaluation <- function(fun_mat,a,b,const_a,const_b){
   not_null <- count_null < dim(fun_mat)[3]
   
   #print(dim(fun_mat))
-  fun_mean=colMeans(fun_mat, dims = 2,na.rm=T)  # 1 x p # calcolo la funzione media della fun_matrice
+  fun_mean=colMeans(fun_mat, dims = 2,na.rm=TRUE)  # 1 x p # calcolo la funzione media della fun_matrice
   
   #calcolo alpha - componente riga
   alpha_fun=NULL
   
   for(j in 1:n){
-    alpha_fun=rbind(alpha_fun,colSums(matrix(fun_mat[j,,],nrow=m,ncol=p),na.rm=T)/sum(not_null[j,]))
+    alpha_fun=rbind(alpha_fun,colSums(matrix(fun_mat[j,,],nrow=m,ncol=p),na.rm=TRUE)/sum(not_null[j,]))
   }
   #dim(alpha_fun) #  n x p
   alpha_fun=alpha_fun-matrix(fun_mean,nrow=n,ncol=length(fun_mean),byrow=TRUE)
   
   if(const_a){
-    alpha_fun = rowMeans(alpha_fun,na.rm=T) # 1 x n
+    alpha_fun = rowMeans(alpha_fun,na.rm=TRUE) # 1 x n
     alpha_fun = array(alpha_fun,dim=c(n,1,1)) # n x 1 x 1
     alpha_fun = narray::rep(alpha_fun, p, along = 3) # n x p
   }
@@ -103,12 +103,12 @@ template_evaluation <- function(fun_mat,a,b,const_a,const_b){
   # calcolo beta - componente colonna
   beta_fun=NULL
   for(j in 1:m){
-    beta_fun=rbind(beta_fun,(colSums(matrix(fun_mat[,j,],nrow=n,ncol=p),dims = 1,na.rm=T)/sum(not_null[,j]))) # m x p
+    beta_fun=rbind(beta_fun,(colSums(matrix(fun_mat[,j,],nrow=n,ncol=p),dims = 1,na.rm=TRUE)/sum(not_null[,j]))) # m x p
   }
   beta_fun=beta_fun-matrix(fun_mean,nrow=m,ncol=length(fun_mean),byrow=TRUE) # m x p
   
   if(const_b){
-    beta_fun=rowMeans(beta_fun,na.rm=T) # 1 x m
+    beta_fun=rowMeans(beta_fun,na.rm=TRUE) # 1 x m
     beta_fun = array(beta_fun,dim=c(1,m,1)) # 1 x m x 1
     beta_fun = narray::rep(beta_fun, p, along = 3) # m x p
   }
@@ -143,18 +143,18 @@ template_evaluation_add <- function(fun_mat,logr,logc,a,b,const_a,const_b){
   count_null <- apply(fun_mat, c(1,2), function(x) sum(is.na(x)))
   not_null <- count_null < dim(fun_mat)[3]
   
-  fun_mean=colMeans(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),p)), dims = 2,na.rm=T)  # 1 x p # calcolo la funzione media della fun_matrice
+  fun_mean=colMeans(array(fun_mat[logr,logc,],dim=c(sum(logr),sum(logc),p)), dims = 2,na.rm=TRUE)  # 1 x p # calcolo la funzione media della fun_matrice
   
   #calcolo alpha - componente riga
   alpha_fun=NULL
   for(j in 1:n){
-    alpha_fun=rbind(alpha_fun,colSums(matrix(fun_mat[j,logc,],nrow=sum(logc),ncol=p),na.rm=T)/sum(not_null[j,logc],na.rm=T))
+    alpha_fun=rbind(alpha_fun,colSums(matrix(fun_mat[j,logc,],nrow=sum(logc),ncol=p),na.rm=TRUE)/sum(not_null[j,logc],na.rm=TRUE))
   }
   #dim(alpha_fun) #  n x p
   alpha_fun=alpha_fun-matrix(fun_mean,nrow=n,ncol=length(fun_mean),byrow=TRUE)
   
   if(const_a){
-    alpha_fun = rowMeans(alpha_fun,na.rm=T) # 1 x n
+    alpha_fun = rowMeans(alpha_fun,na.rm=TRUE) # 1 x n
     alpha_fun = array(alpha_fun,dim=c(n,1,1)) # n x 1 x 1
     alpha_fun = narray::rep(alpha_fun, p, along = 3) # n x p
     
@@ -164,13 +164,13 @@ template_evaluation_add <- function(fun_mat,logr,logc,a,b,const_a,const_b){
   # calcolo beta - componente colonna
   beta_fun=NULL
   for(j in 1:m){
-    beta_fun=rbind(beta_fun,(colSums(matrix(fun_mat[logr,j,],nrow=sum(logr),ncol=p),na.rm=T)/sum(not_null[logr,j],na.rm=T))) # m x p
+    beta_fun=rbind(beta_fun,(colSums(matrix(fun_mat[logr,j,],nrow=sum(logr),ncol=p),na.rm=TRUE)/sum(not_null[logr,j],na.rm=TRUE))) # m x p
   }
   beta_fun=beta_fun-matrix(fun_mean,nrow=m,ncol=length(fun_mean),byrow=TRUE) # m x p
   
   
   if(const_b){
-    beta_fun=rowMeans(beta_fun,na.rm=T) # 1 x m
+    beta_fun=rowMeans(beta_fun,na.rm=TRUE) # 1 x m
     beta_fun = array(beta_fun,dim=c(1,m,1)) # 1 x m x 1
     beta_fun = narray::rep(beta_fun, p, along = 3) # m x p
   }
@@ -207,7 +207,7 @@ evaluate_mat_dist <- function(fun_mat,template.type,a,b,const_a,const_b,shift.al
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
   
-  if(shift.alignement!=F){
+  if(shift.alignement!=FALSE){
     mat_dist=warping_function(fun_mat,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
   }
   
@@ -230,7 +230,7 @@ evaluate_mat_dist_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,co
   m=dim(fun_mat)[2] # numero di colonne
   p=dim(fun_mat)[3] # lunghezza griglia temporale
   
-  if(shift.alignement!=F){
+  if(shift.alignement!=FALSE){
     mat_dist=warping_function_add(fun_mat,logr,logc,template.type,a,b,const_a,const_b,shift.alignement,shift.max, max.iter)
   }
   
@@ -250,7 +250,7 @@ ccscore_fun<-function(mat_dist){
   #n=dim(mat_dist)[1]# numero di righe
   #m=dim(mat_dist)[2] # numero di colonne
 
-  score_fun = mean(mat_dist,na.rm=T)
+  score_fun = mean(mat_dist,na.rm=TRUE)
 
   score_fun
 }
@@ -261,7 +261,7 @@ ccscore_fun<-function(mat_dist){
 rowscore_fun<-function(mat_dist){
   #m=dim(mat_dist)[2] # numero di colonne
 
-  score_fun = rowMeans(mat_dist,na.rm=T) #rowSums(mat_dist,na.rm=T)/(m)
+  score_fun = rowMeans(mat_dist,na.rm=TRUE) #rowSums(mat_dist,na.rm=TRUE)/(m)
 
   score_fun
 
@@ -273,7 +273,7 @@ rowscore_fun<-function(mat_dist){
 colscore_fun<-function(mat_dist){
   #n=dim(mat_dist)[1]# numero di righe
 
-  score_fun = colMeans(mat_dist,na.rm=T)#colSums(mat_dist,na.rm=T)/(n)
+  score_fun = colMeans(mat_dist,na.rm=TRUE)#colSums(mat_dist,na.rm=TRUE)/(n)
 
   score_fun
 
@@ -286,7 +286,7 @@ addrowscore_fun<-function(mat_dist,logc){
   
   #m=dim(mat_dist)[2] # numero di colonne
   
-  score_fun = rowMeans(matrix(mat_dist[,logc],nrow=dim(mat_dist)[1],ncol=sum(logc)),na.rm=T)#rowSums(mat_dist,na.rm=T)/(m)
+  score_fun = rowMeans(matrix(mat_dist[,logc],nrow=dim(mat_dist)[1],ncol=sum(logc)),na.rm=TRUE)#rowSums(mat_dist,na.rm=TRUE)/(m)
   
   score_fun
   
@@ -297,7 +297,7 @@ addrowscore_fun<-function(mat_dist,logc){
 #' @keywords Internal
 addcolscore_fun<-function(mat_dist,logr){
   
-  score_fun = colMeans(matrix(mat_dist[logr,],nrow=sum(logr),ncol=dim(mat_dist)[2]),na.rm=T)#colSums(mat_dist,na.rm=T)/(n)
+  score_fun = colMeans(matrix(mat_dist[logr,],nrow=sum(logr),ncol=dim(mat_dist)[2]),na.rm=TRUE)#colSums(mat_dist,na.rm=TRUE)/(n)
   
   score_fun
   # vettore lungo tanto quanto le colonne (giorni)
@@ -347,7 +347,7 @@ warping_function<- function(fun_mat,template.type,a,b,const_a,const_b,shift.alig
   x.reg <- x
   x.out <- seq(min(x, na.rm = TRUE), max(x, na.rm = TRUE), length = p)
 
-  min.temp <- diff(range(x,na.rm=T))
+  min.temp <- diff(range(x,na.rm=TRUE))
   lower.warp <- -shift.max*min.temp
   upper.warp <- shift.max*min.temp
 
@@ -359,7 +359,7 @@ warping_function<- function(fun_mat,template.type,a,b,const_a,const_b,shift.alig
 
   fun_mat_align <- fun_mat
   iter <- 0
-  conv=F
+  conv=FALSE
   # iterazioni di allineamento fino a iter.max o convergenza
   while(iter<max.iter & conv==FALSE){
     iter <- iter+1
@@ -371,7 +371,7 @@ warping_function<- function(fun_mat,template.type,a,b,const_a,const_b,shift.alig
     if(template.type=='medoid'){new_fun <- medoid_evaluation(fun_mat_align,a,b,const_a,const_b)}
 
 
-    if(shift.alignement==T){
+    if(shift.alignement==TRUE){
 
         for(i in 1:n){
           for(j in 1:m){
@@ -395,7 +395,7 @@ warping_function<- function(fun_mat,template.type,a,b,const_a,const_b,shift.alig
     }
 
     ##print(paste0('dist_mat_old:',sum(dist_mat_old),' - ','dist_mat:',sum(dist_mat)))
-    if(sum(dist_mat_old,na.rm=T)<=sum(dist_mat,na.rm=T)){conv=TRUE; iter=iter-1}
+    if(sum(dist_mat_old,na.rm=TRUE)<=sum(dist_mat,na.rm=TRUE)){conv=TRUE; iter=iter-1}
 
 
   }
@@ -444,7 +444,7 @@ warping_function_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,con
   x.reg <- x
   x.out <- seq(min(x, na.rm = TRUE), max(x, na.rm = TRUE), length = p)
 
-  min.temp <- diff(range(x,na.rm=T))
+  min.temp <- diff(range(x,na.rm=TRUE))
   lower.warp <- -shift.max*min.temp
   upper.warp <- shift.max*min.temp
 
@@ -456,7 +456,7 @@ warping_function_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,con
 
   fun_mat_align <- fun_mat
   iter <- 0
-  conv=F
+  conv=FALSE
   # iterazioni di allineamento fino a iter.max o convergenza
   while(iter<max.iter & conv==FALSE){
     iter <- iter+1
@@ -467,7 +467,7 @@ warping_function_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,con
     if(template.type=='mean'){new_fun <- template_evaluation_add(fun_mat_align,logr,logc,a,b,const_a,const_b)}
     if(template.type=='medoid'){new_fun <- medoid_evaluation_add(fun_mat_align,logr,logc,a,b,const_a,const_b)}
 
-    if(shift.alignement==T){
+    if(shift.alignement==TRUE){
 
         for(i in 1:n){
           for(j in 1:m){
@@ -491,7 +491,7 @@ warping_function_add <- function(fun_mat,logr,logc,template.type,a,b,const_a,con
     }
 
     #print(paste0('dist_mat_old:',sum(dist_mat_old),' - ','dist_mat:',sum(dist_mat)))
-    if(sum(dist_mat_old,na.rm=T)<=sum(dist_mat,na.rm=T)){conv=TRUE; iter=iter-1}
+    if(sum(dist_mat_old,na.rm=TRUE)<=sum(dist_mat,na.rm=TRUE)){conv=TRUE; iter=iter-1}
 
 
   }
@@ -515,8 +515,8 @@ cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shif
   #i <- 1
   while(score_while>delta)
   {
-    logr[logr==T] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
-    logc[logc==T] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
     
     di<-rowscore_fun(dist_mat)
     
@@ -528,8 +528,8 @@ cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shif
     
     ifelse(di[mdi]>dj[mdj] ,logr[logr][mdi]<-FALSE ,logc[logc][mdj]<-FALSE)
     
-    logr[logr==T] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
-    logc[logc==T] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
     
     ##print(logr)
     if(only.one=='False' & !(sum(logr)>1 & sum(logc)>1)){break}
@@ -563,7 +563,7 @@ cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_
   h<-ccscore_fun(dist_mat)
   
 
-  while(h>delta & (sum(mdi,na.rm=T)+sum(mdj,na.rm=T))>0)
+  while(h>delta & (sum(mdi,na.rm=TRUE)+sum(mdj,na.rm=TRUE))>0)
   {
     
     if(sum(logr)>100)
@@ -575,7 +575,7 @@ cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_
       
       
       mdi<-di>(theta*h)
-      if(sum(mdi,na.rm=T) < (sum(logr[!is.na(mdi)],na.rm=T)-1))
+      if(sum(mdi,na.rm=TRUE) < (sum(logr[!is.na(mdi)],na.rm=TRUE)-1))
       {
         logr[logr][mdi]<-FALSE
 
@@ -601,7 +601,7 @@ cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_
       dj<-colscore_fun(dist_mat)
      
       mdj<-dj>(theta*h)
-      if(sum(mdj,na.rm=T) < (sum(logc[!is.na(mdj)])-1))
+      if(sum(mdj,na.rm=TRUE) < (sum(logc[!is.na(mdj)])-1))
       {
         logc[logc][mdj]<-FALSE
         
@@ -766,7 +766,7 @@ warping_function_plot<- function(res,fun_mat,template.type,a,b,const_a,const_b,s
   x.reg <- x
   x.out <- seq(min(x, na.rm = TRUE), max(x, na.rm = TRUE), length = p)
 
-  min.temp <- diff(range(x,na.rm=T))
+  min.temp <- diff(range(x,na.rm=TRUE))
   lower.warp <- -shift.max*min.temp
   upper.warp <- shift.max*min.temp
 
@@ -779,7 +779,7 @@ warping_function_plot<- function(res,fun_mat,template.type,a,b,const_a,const_b,s
 
   fun_mat_align <- fun_mat
   iter <- 0
-  conv=F
+  conv=FALSE
   # iterazioni di allineamento fino a iter.max o convergenza
   while(iter<max.iter & conv==FALSE){
     iter <- iter+1
@@ -791,7 +791,7 @@ warping_function_plot<- function(res,fun_mat,template.type,a,b,const_a,const_b,s
     if(template.type=='mean'){new_fun <- template_evaluation(fun_mat_align,a,b,const_a,const_b)}
     if(template.type=='medoid'){new_fun <- medoid_evaluation(fun_mat_align,a,b,const_a,const_b)}
 
-    if(shift.alignement==T){
+    if(shift.alignement==TRUE){
 
         for(i in 1:n){
           for(j in 1:m){
@@ -816,7 +816,7 @@ warping_function_plot<- function(res,fun_mat,template.type,a,b,const_a,const_b,s
     }
 
     #print(paste0('dist_mat_old:',sum(dist_mat_old),' - ','dist_mat:',sum(dist_mat)))
-    if(sum(dist_mat_old,na.rm=T)<=sum(dist_mat,na.rm=T)){conv=TRUE; iter=iter-1; fun_mat_align=fun_mat_align_old}
+    if(sum(dist_mat_old,na.rm=TRUE)<=sum(dist_mat,na.rm=TRUE)){conv=TRUE; iter=iter-1; fun_mat_align=fun_mat_align_old}
 
 
   }
@@ -827,7 +827,7 @@ warping_function_plot<- function(res,fun_mat,template.type,a,b,const_a,const_b,s
   coeff_mat=align_mat
 
   x.out=matrix(x,nrow=n*m,ncol=p,byrow = T)
-  x.align=c(matrix(coeff_mat,nrow=n*m,1,byrow =T))
+  x.align=c(matrix(coeff_mat,nrow=n*m,1,byrow =TRUE))
   x.out=x.out+x.align
 
   res=list(fun_mat_align=fun_mat_align,template=new_fun,x.out=x.out)

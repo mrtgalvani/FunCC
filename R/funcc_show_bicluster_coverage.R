@@ -6,8 +6,12 @@
 #' @param not_assigned logicol: if true also the cluster of not assigned elements is included
 #' @param max_coverage scalar: percentage of maximum cumulative coverage to be shown
 #' @return a figure representing for each bi-cluster the coverage in terms of percentage of included functions
+#' @examples  
+#' data("funCCdata")
+#' res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+#' funcc_show_bicluster_coverage(funCCdata,res)
 
-funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=T,max_coverage=1){
+funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=TRUE,max_coverage=1){
 
   cl <- perc <- type <- cum_perc <- NULL
   

@@ -17,3 +17,9 @@ a figure representing the bi-clusters positions in the original data matrix
 \description{
 funcc_show_block_matrix graphically shows the bi-clusters positions in the original data matrix
 }
+\examples{
+ 
+data("funCCdata")
+res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+funcc_show_block_matrix(funCCdata,res)
+}

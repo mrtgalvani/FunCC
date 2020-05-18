@@ -7,7 +7,7 @@
 funcc_show_bicluster_coverage(
   fun_mat,
   res_input,
-  not_assigned = T,
+  not_assigned = TRUE,
   max_coverage = 1
 )
 }
@@ -25,4 +25,10 @@ a figure representing for each bi-cluster the coverage in terms of percentage of
 }
 \description{
 funcc_show_bicluster_coverage graphically shows the coverage of each bi-cluster in terms of percentage of included functions
+}
+\examples{
+ 
+data("funCCdata")
+res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+funcc_show_bicluster_coverage(funCCdata,res)
 }

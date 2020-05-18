@@ -4,6 +4,10 @@
 #' @param fun_mat The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
 #' @param res_input An object produced by the funcc_biclust function
 #' @return a figure representing the dimensions of each bi-cluster (i.e. number of rows and columns)
+#' @examples  
+#' data("funCCdata")
+#' res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+#' funcc_show_bicluster_dimension(funCCdata,res)
 #'
 funcc_show_bicluster_dimension <- function(fun_mat,res_input){
   
@@ -60,7 +64,7 @@ funcc_show_bicluster_dimension <- function(fun_mat,res_input){
 
 
   grDevices::dev.new()
-  g <- ggplot2::ggplot(count, ggplot2::aes(x=ncol,y=nrow,col=factor(cl))) + ggplot2::geom_point(ggplot2::aes(size = n_element)) +
+  g <- ggplot2::ggplot(count, ggplot2::aes(x=ncol,y=nrow,colactor(cl))) + ggplot2::geom_point(ggplot2::aes(size = n_element)) +
     ggplot2::scale_color_manual(values=col_palette) +
     ggplot2::xlab('Number of Columns') + ggplot2::ylab('Number of Rows') + ggplot2::labs(color='Bi-Cluster')
 

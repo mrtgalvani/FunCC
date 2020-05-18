@@ -1,9 +1,9 @@
 Package: FunCC
-Title: Functional Cheng and Church Bi-clustering
-Version: 0.0.0.9000
+Title: Functional Cheng and Church Bi-Clustering
+Version: 1.0
 Author: Agostino Torti [aut, cre], Marta Galvani [aut, cre], Alessandra Menafoglio [aut], Simone Vantini[aut]
 Maintainer: Agostino Torti <agostino.torti@polimi.it>
-Description: The FunCC package allows to apply the funCC algorithm to simultaneously cluster the rows and the columns of a data matrix whose inputs are functions. 
+Description: The FunCC package allows to apply the FunCC algorithm to simultaneously cluster the rows and the columns of a data matrix whose inputs are functions. 
 Depends: R (>= 3.5.1)
 License: GPL (>= 3) 
 Encoding: UTF-8

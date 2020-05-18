@@ -5,7 +5,11 @@
 #' @param fun_mat The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
 #' @param res_input An object produced by the funcc_biclust function
 #' @return a figure representing the dimensions of each bi-cluster (i.e. number of rows and columns)
-#'
+#' @examples  
+#' data("funCCdata")
+#' res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+#' funcc_show_bicluster_hscore(funCCdata,res)
+#' 
 funcc_show_bicluster_hscore <- function(fun_mat,res_input){
   
   biclust_n <- NULL

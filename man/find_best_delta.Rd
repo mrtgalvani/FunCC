@@ -14,9 +14,9 @@ find_best_delta(
   number = 100,
   alpha = 0,
   beta = 0,
-  const_alpha = F,
-  const_beta = F,
-  shift.alignement = F,
+  const_alpha = FALSE,
+  const_beta = FALSE,
+  shift.alignement = FALSE,
   shift.max = 0.1,
   max.iter.align = 100
 )
@@ -55,4 +55,9 @@ a dataframe containing for each evaluated delta: Htot_sum (the sum of totale H-s
 }
 \description{
 The find_best_delta function evaluate the results of FunCC algorithm in terms of total H-score value, the number of obtained bi-clusters and the number of not assigned elements when varying the delta value
+}
+\examples{
+ 
+data("funCCdata")
+find_best_delta(funCCdata,delta_min=0.1,delta_max=20,num_delta=20,alpha=1,beta=0,const_alpha=TRUE)
 }

@@ -12,9 +12,9 @@ funcc_biclust(
   number = 100,
   alpha = 0,
   beta = 0,
-  const_alpha = F,
-  const_beta = F,
-  shift.alignement = F,
+  const_alpha = FALSE,
+  const_beta = FALSE,
+  shift.alignement = FALSE,
   shift.max = 0.1,
   max.iter.align = 100
 )
@@ -46,6 +46,10 @@ funcc_biclust(
 }
 \value{
 a list of two elements containing respectively the Biclustresults and a dataframe containing the parameters setting of the algorithm
+ @examples  
+data("funCCdata")
+res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+res
 }
 \description{
 The funCC algorithm allows to simultaneously cluster the rows and the columns of a data matrix where each entry of the matrix is a function or a time series

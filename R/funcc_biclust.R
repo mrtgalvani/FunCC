@@ -14,8 +14,12 @@
 #' @param shift.max scalar: shift.max controls the maximal allowed shift, at each iteration, in the alignment procedure with respect to the range of curve domains. t.max must be such that 0<shift.max<1
 #' @param max.iter.align integer: maximum number of iteration in the alignment procedure
 #' @return a list of two elements containing respectively the Biclustresults and a dataframe containing the parameters setting of the algorithm
+#'  @examples  
+#' data("funCCdata")
+#' res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+#' res
 
-funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,alpha=0,beta=0,const_alpha=F,const_beta=F,shift.alignement=F,shift.max = 0.1, max.iter.align=100){
+funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,alpha=0,beta=0,const_alpha=FALSE,const_beta=FALSE,shift.alignement=FALSE,shift.max = 0.1, max.iter.align=100){
 
   if(length(dim(fun_mat))!=3){
     stop('Error: fun_mat should be an array of three dimensions')
@@ -99,7 +103,7 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     print(i)
     # tolgo righe e colonne interamente a null
     # qui
-    logr[logr==T] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
     
     if(only.one=='False' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)) # non voglio che ci sia una sola riga o una sola colonna
     {
@@ -125,7 +129,7 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     }
     
     
-    logc[logc==T] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
 
     if(only.one=='False' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)) # non voglio che ci sia una sola riga o una sola colonna
     {
@@ -224,8 +228,8 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
       # ordino le sottomatrici per dimensione
       if(n_clust>1){
         dim <- colSums(clus_row) * rowSums(clus_col)
-        clus_row <- clus_row[,order(dim,decreasing=T)]
-        clus_col <- clus_col[order(dim,decreasing=T),]
+        clus_row <- clus_row[,order(dim,decreasing=TRUE)]
+        clus_col <- clus_col[order(dim,decreasing=TRUE),]
       }
 
       logr <- rep(F,nrow(xy))
@@ -247,8 +251,8 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     # ordino le sottomatrici per dimensione
     if(k>1){
       dim <- colSums(clus_row) * rowSums(clus_col)
-      clus_row <- clus_row[,order(dim,decreasing=T)]
-      clus_col <- clus_col[order(dim,decreasing=T),]
+      clus_row <- clus_row[,order(dim,decreasing=TRUE)]
+      clus_col <- clus_col[order(dim,decreasing=TRUE),]
     }
 
     return(list(biclust::BiclustResult(as.list(MYCALL),as.matrix(clus_row),as.matrix(clus_col),(k),list(0)),parameter=parameter_input))
@@ -261,8 +265,8 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     # ordino le sottomatrici per dimensione
     if(k>1){
       dim <- colSums(clus_row) * rowSums(clus_col)
-      clus_row <- clus_row[,order(dim,decreasing=T)]
-      clus_col <- clus_col[order(dim,decreasing=T),]
+      clus_row <- clus_row[,order(dim,decreasing=TRUE)]
+      clus_col <- clus_col[order(dim,decreasing=TRUE),]
     }
     return(list(biclust::BiclustResult(as.list(MYCALL),as.matrix(clus_row),as.matrix(clus_col),k,list(0)),parameter=parameter_input))
   }

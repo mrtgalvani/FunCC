@@ -17,3 +17,10 @@ a figure representing the dimensions of each bi-cluster (i.e. number of rows and
 \description{
 funcc_show_bicluster_dimension graphically shows the dimensions of each bi-cluster (i.e. number of rows and columns)
 }
+\examples{
+ 
+data("funCCdata")
+res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+funcc_show_bicluster_dimension(funCCdata,res)
+
+}

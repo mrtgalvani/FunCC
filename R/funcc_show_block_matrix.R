@@ -4,6 +4,10 @@
 #' @param fun_mat The data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T
 #' @param res_input An object produced by the funcc_biclust function
 #' @return a figure representing the bi-clusters positions in the original data matrix
+#' @examples  
+#' data("funCCdata")
+#' res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
+#' funcc_show_block_matrix(funCCdata,res)
 
 funcc_show_block_matrix <- function(fun_mat,res_input){
   
