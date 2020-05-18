@@ -64,7 +64,7 @@ funcc_show_bicluster_dimension <- function(fun_mat,res_input){
 
 
   grDevices::dev.new()
-  g <- ggplot2::ggplot(count, ggplot2::aes(x=ncol,y=nrow,colactor(cl))) + ggplot2::geom_point(ggplot2::aes(size = n_element)) +
+  g <- ggplot2::ggplot(count, ggplot2::aes(x=ncol,y=nrow,col=factor(cl))) + ggplot2::geom_point(ggplot2::aes(size = n_element)) +
     ggplot2::scale_color_manual(values=col_palette) +
     ggplot2::xlab('Number of Columns') + ggplot2::ylab('Number of Rows') + ggplot2::labs(color='Bi-Cluster')
 
