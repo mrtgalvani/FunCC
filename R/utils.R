@@ -515,8 +515,8 @@ cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shif
   #i <- 1
   while(score_while>delta)
   {
-    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
-    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),FALSE,TRUE)
+    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),FALSE,TRUE)
     
     di<-rowscore_fun(dist_mat)
     
@@ -528,8 +528,8 @@ cc1_fun<-function(fun_mat,logr,logc,delta,template.type,a,b,const_a,const_b,shif
     
     ifelse(di[mdi]>dj[mdj] ,logr[logr][mdi]<-FALSE ,logc[logc][mdj]<-FALSE)
     
-    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
-    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),FALSE,TRUE)
+    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),FALSE,TRUE)
     
     ##print(logr)
     if(only.one=='False' & !(sum(logr)>1 & sum(logc)>1)){break}
@@ -826,7 +826,7 @@ warping_function_plot<- function(res,fun_mat,template.type,a,b,const_a,const_b,s
 
   coeff_mat=align_mat
 
-  x.out=matrix(x,nrow=n*m,ncol=p,byrow = T)
+  x.out=matrix(x,nrow=n*m,ncol=p,byrow = TRUE)
   x.align=c(matrix(coeff_mat,nrow=n*m,1,byrow =TRUE))
   x.out=x.out+x.align
 

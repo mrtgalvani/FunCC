@@ -58,7 +58,7 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     stop('Error: fun_mat must an array of three dimensions')
     }
 
-  if(!(const_alpha %in% c(F,T)) | !(const_beta %in% c(F,T))){
+  if(!(const_alpha %in% c(FALSE,TRUE)) | !(const_beta %in% c(FALSE,TRUE))){
     stop('Error: const_alpha and const_beta must TRUE or FALSE')
     }
 
@@ -103,7 +103,7 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     print(i)
     # tolgo righe e colonne interamente a null
     # qui
-    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),F,T)
+    logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),FALSE,TRUE)
     
     if(only.one=='False' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)) # non voglio che ci sia una sola riga o una sola colonna
     {
@@ -129,7 +129,7 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
     }
     
     
-    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),F,T)
+    logc[logc==TRUE] <- ifelse(colSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logr),FALSE,TRUE)
 
     if(only.one=='False' & (sum(1-xy)<2 | sum(logr)<=1 | sum(logc)<=1)) # non voglio che ci sia una sola riga o una sola colonna
     {

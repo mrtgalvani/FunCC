@@ -22,7 +22,7 @@ funcc_show_bicluster_coverage <- function(fun_mat,res_input,not_assigned=TRUE,ma
     
   }
 
-  if(!not_assigned %in% c(T,F)){
+  if(!not_assigned %in% c(TRUE,FALSE)){
     stop('Error: not_assigned should be a logicol value TRUE/FALSE')
     
   }

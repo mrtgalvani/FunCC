@@ -12,7 +12,7 @@
 #' res <- funcc_biclust(funCCdata,delta=10,theta=1,alpha=1,beta=0,const_alpha=TRUE)
 #' funcc_show_results(funCCdata,res)
 
-funcc_show_results <- function(fun_mat,res_input,only.mean=F,aligned=F,warping=F){
+funcc_show_results <- function(fun_mat,res_input,only.mean=FALSE,aligned=FALSE,warping=FALSE){
   
   variable <- value <- obs <- cluster <- obj <- NULL
 
