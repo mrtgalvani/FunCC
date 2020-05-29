@@ -100,7 +100,7 @@ funcc_biclust<-function(fun_mat,delta,theta=1,template.type='mean',number=100,al
   k <- 0 # numero di bicluster trovati
   for(i in 1:number)
   {
-    print(i)
+    #print(i)
     # tolgo righe e colonne interamente a null
     # qui
     logr[logr==TRUE] <- ifelse(rowSums(matrix(is.na(matrix(fun_mat[logr,logc,1],nrow=sum(logr),ncol=sum(logc))),nrow=sum(logr),ncol=sum(logc)))==sum(logc),FALSE,TRUE)

@@ -586,7 +586,7 @@ cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_
       }
       else
       {
-        print(warning(paste('Theta', theta,'to small!')))
+        warning(paste('Theta', theta,'to small!'))
         mdi <- 0
       }
     }
@@ -614,7 +614,7 @@ cc2_fun<-function(fun_mat,logr,logc,delta,theta,template.type,a,b,const_a,const_
       else
       {
         
-        print(warning(paste('theta', theta,'to small!')))
+        warning(paste('theta', theta,'to small!'))
         mdi <- 0
       }
     }
